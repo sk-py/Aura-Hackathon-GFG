@@ -70,4 +70,18 @@ const getRecommendedJobs = async (req, res) => {
   res.status(200).json(matchedJobs);
 };
 
-module.exports = { createJobPosts, getRecommendedJobs };
+//Function for deleteing the job Post
+const deleteJobPost = async (req, res) => {
+  try {
+    const jobId = req.body;
+    const result = await Jobs.deleteOne({ _id: jobId });
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ error: "Job does not exist" });
+    }
+  } catch (error) {
+    console.error("Error deleting Job:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+module.exports = { createJobPosts, getRecommendedJobs, deleteJobPost };

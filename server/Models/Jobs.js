@@ -12,6 +12,10 @@ const job = {
     type: String,
     required: true,
   },
+  responsibilities: {
+    type: String,
+    required: false,
+  },
   package: [
     {
       type: String, //Array of two  - minimum

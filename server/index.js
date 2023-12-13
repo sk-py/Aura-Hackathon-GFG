@@ -5,7 +5,8 @@ const dbConnect = require("./connection");
 const bodyParser = require("body-parser");
 const authRoutes = require("./Routes/Auth");
 const jobRoutes = require("./Routes/Jobs");
-
+const projectRoutes = require("./Routes/Projects");
+const freelanceRoutes = require("./Routes/Freelance");
 //Calling Database Connection Function
 dbConnect();
 
