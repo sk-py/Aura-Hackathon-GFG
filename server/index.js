@@ -2,7 +2,8 @@
 const express = require("express");
 const cors = require("cors");
 const dbConnect = require("./connection");
-const authRoutes = require("./Routes/Auth")
+const bodyParser = require("body-parser");
+const authRoutes = require("./Routes/Auth");
 
 //Calling Database Connection Function
 dbConnect();
@@ -11,8 +12,8 @@ dbConnect();
 const app = express();
 
 //Middlewares
-
-app.use(cors);
+app.use(bodyParser.json())
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
 //Using Routes
