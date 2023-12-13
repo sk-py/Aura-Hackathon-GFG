@@ -33,12 +33,22 @@ const job = {
       type: String,
       enum: ["Experienced", "Fresher"],
     },
-    postedBy: {
+  },
+  requiredSkills: [
+    {
       type: String,
     },
-    status: {
-      type: String,
-      enum: ["Open", "Closed"],
-    },
+  ],
+  postedBy: {
+    type: String,
+  },
+  status: {
+    type: String,
+    enum: ["Open", "Closed"],
   },
 };
+
+const JobSchema = mongoose.Schema(job);
+const Jobs = mongoose.model("Jobs", JobSchema);
+
+module.exports = Jobs;
