@@ -1,4 +1,5 @@
 const Jobs = require("../Models/Jobs");
+const UserModel = require("../Models/User");
 
 //Function for creating Job Posts
 const createJobPosts = async (req, res) => {
@@ -52,4 +53,21 @@ const createJobPosts = async (req, res) => {
   }
 };
 
-module.exports = { createJobPosts };
+//Function for sending recommended jobs on the basis of skills of users
+const getRecommendedJobs = async (req, res) => {
+  const id = req.params.userId;
+  const user = await UserModel.findOne({ _id: id });
+  if (!user) {
+    res.status(404).json("User not found");
+  }
+  const userSkills = user.skills;
+  if (userSkills.length === 0) {
+    res.status(204).json({ err: "Add skills to get job recommendations" });
+  }
+  const matchedJobs = await Jobs.find({
+    requiredSkills: { $in: userSkills },
+  });
+  res.status(200).json(matchedJobs);
+};
+
+module.exports = { createJobPosts, getRecommendedJobs };
