@@ -13,7 +13,7 @@ export default function SignUp() {
   } = useForm();
   const [recruiter, setRecruiter] = useState(false);
   const [isOtpVerified, setIsOtpVerified] = useState(false);
-  const [isOtpSend, setIsOtpSend] = useState(true);
+  const [isOtpSend, setIsOtpSend] = useState(false);
   const navigate = useNavigate();
   const handleUser = (e) => {
     if (
@@ -31,6 +31,7 @@ export default function SignUp() {
   };
 
   const submitAction = async (formData) => {
+    console.log("Api calling");
     if (recruiter) {
       console.log("Recruiter SignUp");
       try {
@@ -58,6 +59,7 @@ export default function SignUp() {
         toast.error(error.response.data.err);
       }
     }
+    
     // navigate("/postsignup")
   };
   return (
@@ -126,7 +128,7 @@ export default function SignUp() {
                 autoComplete="email"
                 required
               />
-              {isOtpSend&&<input
+              {(isOtpSend && !isOtpVerified)&&<input
                 className="rounded-xl border"
                 type="email"
                 // name="email"
@@ -191,9 +193,12 @@ export default function SignUp() {
                   </div>
                 </>
               )}
-              <button className="bg-[#0b70ff] rounded-xl text-white py-2 hover:scale-105 duration-300">
+              <div className="bg-[#0b70ff] text-center rounded-xl text-white py-2 hover:scale-105 duration-300">
                 {isOtpSend ? "Verify" : "Send otp"}
-              </button>
+              </div>
+              {isOtpSend&&isOtpVerified&&<button className="bg-[#0b70ff] rounded-xl text-white py-2 hover:scale-105 duration-300">
+                SignUp
+              </button>}
             </form>
 
             {/* <div className="flex"> */}

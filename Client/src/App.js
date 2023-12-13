@@ -3,7 +3,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Homepage from "./Pages/HomePage";
 // import JobDetailsPage from "./Pages/JobDetailsPage";
 import LoginPage from "./Pages/LoginPage";
-// import MyApplicationPage from "./Pages/MyApplicationPage";
+import MyApplicationPage from "./Pages/MyApplicationPage";
 import SignUpPage from "./Pages/SignUpPage";
 import { ToastContainer} from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
@@ -24,10 +24,10 @@ const router = createBrowserRouter([
     path: "login",
     element: <LoginPage></LoginPage>,
   },
-  // {
-  //   path: "myapplication",
-  //   element: <MyApplicationPage></MyApplicationPage>,
-  // },
+  {
+    path: "myapplication",
+    element: <MyApplicationPage></MyApplicationPage>,
+  },
   {
     path: "signup",
     element: <SignUpPage></SignUpPage>,
