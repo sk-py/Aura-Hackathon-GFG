@@ -11,6 +11,9 @@ const ProjectSchema = mongoose.Schema({
   link: {
     type: String,
   },
+  userId: {
+    type: String,
+  },
 });
 
 const ProjectModel = mongoose.model("Projects", ProjectSchema);
