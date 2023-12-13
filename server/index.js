@@ -2,6 +2,7 @@
 const express = require("express");
 const cors = require("cors");
 const dbConnect = require("./connection");
+const bodyParser = require("body-parser");
 const authRoutes = require("./Routes/Auth");
 
 //Calling Database Connection Function
@@ -11,8 +12,8 @@ dbConnect();
 const app = express();
 
 //Middlewares
-
-app.use(cors);
+app.use(bodyParser.json())
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
 //Using Routes
@@ -22,7 +23,6 @@ app.get("/", (req, res) => {
 
 //Authentication Router
 app.use("/api/auth", authRoutes);
-app.use("/api/jobs", JobsRoutes);
 
 //Listening on specified PORT
 const port = 9000;

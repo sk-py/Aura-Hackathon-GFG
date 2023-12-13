@@ -12,6 +12,7 @@ export default function SignUp() {
     formState: { errors },
   } = useForm();
   const [recruiter, setRecruiter] = useState(false);
+  const [emailVerified, setEmailVerified] = useState(true);
   const navigate = useNavigate();
   const handleUser = (e) => {
     if (
@@ -115,15 +116,18 @@ export default function SignUp() {
                   required
                 />
               </div>
-              <input
-                className="rounded-xl border"
-                type="email"
-                // name="email"
-                {...register("email")}
-                placeholder="Email"
-                autoComplete="email"
-                required
-              />
+              <div>
+                <input
+                  className="rounded-xl border"
+                  type="email"
+                  // name="email"
+                  {...register("email")}
+                  placeholder="Email"
+                  autoComplete="email"
+                  required
+                />
+                <button>Verify</button>
+              </div>
               {recruiter && (
                 <input
                   className="rounded-xl border"
@@ -135,7 +139,7 @@ export default function SignUp() {
                   required
                 />
               )}
-              <input
+              {/* <input
                 className="rounded-xl border"
                 type="password"
                 // name="password"
@@ -143,8 +147,8 @@ export default function SignUp() {
                 placeholder="Password"
                 autoComplete="password"
                 required
-              />
-              <div>
+              /> */}
+              {/* <div>
                 <div className="relative">
                   <input
                     className="p-2 w-full rounded-xl border"
@@ -175,7 +179,7 @@ export default function SignUp() {
                     Password not matching
                   </p>
                 )}
-              </div>
+              </div> */}
               <button className="bg-[#0b70ff] rounded-xl text-white py-2 hover:scale-105 duration-300">
                 Signup
               </button>

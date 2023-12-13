@@ -26,11 +26,13 @@ export default function Login() {
   }, [loggedIn]);
 
   const submitAction = async (data) => {
+    console.log(data);
     try {
       const response = await axios.post(
         "http://localhost:9000/api/auth/login",
         data
-      );
+        );
+        console.log("Logging");
       console.log(response.data.user.firstName);
       if (response.status === 200) {
         dispatch(setData({ ...response.data, type: response.data.user.type }));
