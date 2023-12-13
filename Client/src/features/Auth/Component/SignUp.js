@@ -15,8 +15,8 @@ export default function SignUp() {
   const navigate = useNavigate();
   const handleUser = (e) => {
     if (
-      (recruiter && e.target.value != "recruiter") ||
-      (!recruiter && e.target.value != "candidate")
+      (recruiter && e.target.value !== "recruiter") ||
+      (!recruiter && e.target.value !== "candidate")
     ) {
       setRecruiter(!recruiter);
     }
@@ -29,34 +29,34 @@ export default function SignUp() {
   };
 
   const submitAction = async (formData) => {
-    // if (recruiter) {
-    //   console.log("Recruiter SignUp");
-    //   try {
-    //     const response = await axios.post(
-    //       "http://localhost:9000/api/auth/recruiter/signup",
-    //       formData
-    //     );
-    //     if (response.status === 201) {
-    //       toast.success("Account Created and Loggedin successFully");
-    //     }
-    //   } catch (error) {
-    //     toast.error(error.response.data);
-    //   }
-    // } else {
-    //   console.log("USer SignUp");
-    //   try {
-    //     const response = await axios.post(
-    //       "http://localhost:9000/api/auth/user/signup",
-    //       formData
-    //     );
-    //     if (response.status === 201)
-    //       toast.success("Account Created and Loggedin successFully");
-    //     navigate("/postsignup");
-    //   } catch (error) {
-    //     toast.error(error.response.data.err);
-    //   }
-    // }
-    navigate("/postsignup")
+    if (recruiter) {
+      console.log("Recruiter SignUp");
+      try {
+        const response = await axios.post(
+          "http://localhost:9000/api/auth/recruiter/signup",
+          formData
+        );
+        if (response.status === 201) {
+          toast.success("Account Created and Loggedin successFully");
+        }
+      } catch (error) {
+        toast.error(error.response.data);
+      }
+    } else {
+      console.log("USer SignUp");
+      try {
+        const response = await axios.post(
+          "http://localhost:9000/api/auth/user/signup",
+          formData
+        );
+        if (response.status === 201)
+          toast.success("Account Created and Loggedin successFully");
+        navigate("/postsignup");
+      } catch (error) {
+        toast.error(error.response.data.err);
+      }
+    }
+    // navigate("/postsignup")
   };
   return (
     <div>
@@ -151,7 +151,7 @@ export default function SignUp() {
                     type="text"
                     {...register("cnfmPassword", {
                       validate: (value, formValue) =>
-                        value == formValue.password,
+                        value === formValue.password,
                     })}
                     placeholder="Confirm password"
                     autoComplete="current-password"

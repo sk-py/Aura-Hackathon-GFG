@@ -83,14 +83,14 @@ export default function Navbar() {
           {loginStatus ? (
             <Link
               to="/login"
-              className="text-[#1967d2] bg-[#e2eaf8] px-2 rounded-sm"
+              className="text-[#1967d2] block bg-[#e2eaf8] px-2 rounded-sm"
             >
               Profile
             </Link>
           ) : (
             <Link
               to="/login"
-              className="text-[#1967d2] bg-[#e2eaf8] px-2 rounded-sm"
+              className="text-[#1967d2] block bg-[#e2eaf8] px-2 rounded-sm"
             >
               Login
             </Link>
@@ -149,13 +149,13 @@ export default function Navbar() {
           >
             Home
           </Link>
-          <Link to="/jobs" className="px-4 text-base py-2">
+          <Link to="/jobs" className="px-4 block text-base py-2">
             Jobs
           </Link>
-          <Link to="/freelance" className="px-4 text-base py-2">
+          <Link to="/freelance" className="px-4 block text-base py-2">
             Freelance opportunities
           </Link>
-          <Link to="/myapplication" className="px-4 text-base py-2">
+          <Link to="/myapplication" className="px-4 block text-base py-2">
             Application
           </Link>
           <li className="px-4 text-base py-2">Profile</li>

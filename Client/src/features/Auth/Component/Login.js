@@ -13,18 +13,17 @@ export default function Login() {
   const {
     register,
     handleSubmit,
-    watch,
+    // watch,
     formState: { errors },
   } = useForm();
-  
-  console.log(watch);
 
   useEffect(() => {
     if (loggedIn) {
       console.log(loggedIn);
+      // eslint-disable-next-line
       navigate("/");
     }
-  },[loggedIn]);
+  }, [loggedIn]);
 
   const submitAction = async (data) => {
     try {

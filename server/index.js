@@ -2,6 +2,7 @@
 const express = require("express");
 const cors = require("cors");
 const dbConnect = require("./connection");
+const authRoutes = require("./Routes/Auth")
 
 //Calling Database Connection Function
 dbConnect();
@@ -18,6 +19,9 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
   res.json("Server working perfectly");
 });
+
+//Authentication Router
+app.use("/api/auth", authRoutes);
 
 //Listening on specified PORT
 const port = 9000;
