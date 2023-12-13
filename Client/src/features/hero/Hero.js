@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function Search() {
+export default function Hero() {
   const arr = [1, 2, 3, 4, 5, 6, 7, 87];
   return (
     <>
@@ -15,7 +15,7 @@ export default function Search() {
         </button>
       </div>
       <h1 className="text-3xl my-5 text-center">Recommended Jobs </h1>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 sm:grid grid-cols-2 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 md:grid grid-cols-2 lg:px-8">
         {arr.map((data) => {
           return (
             <Link to="/jobdetails">
@@ -89,10 +89,12 @@ export default function Search() {
           );
         })}
       </div>
-      <Link to="/alljobs" className="text-center block ">Explore all jobs</Link>
+      <Link to="/alljobs" className="text-center block text-[#0b70ff] my-1">
+        Explore all jobs &rarr;
+      </Link>
       <h1 className="text-3xl my-5 text-center">Top Freelance Projects </h1>
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 sm:grid grid-cols-2 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 md:grid grid-cols-2 lg:px-8">
         {arr.map((data) => {
           return (
             <Link to="/jobdetails">
@@ -166,6 +168,9 @@ export default function Search() {
           );
         })}
       </div>
+      <Link to="/alljobs" className="text-center block text-[#0b70ff] my-1">
+        Explore all Freelance Projects &rarr;
+      </Link>
     </>
   );
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import { Fragment, useState } from "react";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
@@ -55,13 +55,12 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Jobs() {
+export default function Freelance() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+
   return (
     <>
-        {/* <div className="mx-5 bg-white p-0 rounded-xl shadow-xl md:shadow-none md:w-fit md:mx-auto"> */}
-        
-        <form className="flex my-3 flex-wrap justify-center gap-y-4 gap-x-6 sm:flex-row">
+    <form className="flex my-3 flex-wrap justify-center gap-y-4 gap-x-6 sm:flex-row">
           <div className="relative flex items-center">
             <input
               className="border p-3 rounded-xl border-gray-600"
@@ -107,11 +106,7 @@ export default function Jobs() {
             Search
           </button>
         </form>
-      {/* </div> */}
-
-      {/* Template */}
-
-      <div className="bg-white">
+         <div className="bg-white">
         <div>
           {/* Mobile filter dialog */}
           <Transition.Root show={mobileFiltersOpen} as={Fragment}>
@@ -225,7 +220,7 @@ export default function Jobs() {
 
           <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-0">
-              <h1 className="text-2xl font-bold tracking-tight text-gray-900">All Jobs</h1>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900">All Freelance Projects</h1>
               <div></div>
 
               <div className="flex items-center">
@@ -445,5 +440,5 @@ export default function Jobs() {
         </div>
       </div>
     </>
-  );
+  )
 }
