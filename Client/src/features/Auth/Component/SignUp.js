@@ -9,11 +9,13 @@ export default function SignUp() {
     register,
     handleSubmit,
     // watch,
+    getValues,
     formState: { errors },
   } = useForm();
   const [recruiter, setRecruiter] = useState(false);
   const [isOtpVerified, setIsOtpVerified] = useState(false);
   const [isOtpSend, setIsOtpSend] = useState(false);
+  const [otp,setOtp]=useState(null);
   const navigate = useNavigate();
   const handleUser = (e) => {
     if (
@@ -29,6 +31,35 @@ export default function SignUp() {
   const handleHide = () => {
     document.getElementsByName("password")[0].setAttribute("type", "password");
   };
+
+  const sendOtp = async () => {
+    let email =getValues("email");
+    console.log(email)
+    console.log("send otp")
+    const res = await axios.post(
+      "http://localhost:9000/api/auth/user/sent-otp",{email}
+    );
+    if (res.status == 200) {
+      toast.success("OTP sent successfully")
+      setIsOtpSend(true);
+      setOtp(res.data.otp)
+    }
+  };
+
+  const verifyotp = async ()=>{
+    const userotp=getValues("otp");
+    console.log(otp)
+    console.log(userotp+" usaer")
+    if(userotp==otp){
+      toast.success("otp verification successfull")
+      setIsOtpVerified(true);
+      setIsOtpSend(false);
+
+    }
+    else{
+      toast.error("incorrect otp ")
+    }
+  }
 
   const submitAction = async (formData) => {
     console.log("Api calling");
@@ -62,6 +93,7 @@ export default function SignUp() {
     
     // navigate("/postsignup")
   };
+
   return (
     <div>
       {/* Button Group */}
@@ -119,16 +151,14 @@ export default function SignUp() {
                   required
                 />
               </div>
-              <input
-                className="rounded-xl border"
-                type="email"
+              <input className="rounded-xl border" type="email"
                 // name="email"
                 {...register("email")}
                 placeholder="Email"
                 autoComplete="email"
                 required
               />
-              {(isOtpSend && !isOtpVerified)&&<input
+              {isOtpSend&&<input
                 className="rounded-xl border"
                 type="email"
                 // name="email"
@@ -193,12 +223,10 @@ export default function SignUp() {
                   </div>
                 </>
               )}
-              <div className="bg-[#0b70ff] text-center rounded-xl text-white py-2 hover:scale-105 duration-300">
+              <div className="bg-[#0b70ff] text-center rounded-xl text-white py-2 hover:scale-105 duration-300" 
+              onClick={isOtpSend?verifyotp:sendOtp}>
                 {isOtpSend ? "Verify" : "Send otp"}
               </div>
-              {isOtpSend&&isOtpVerified&&<button className="bg-[#0b70ff] rounded-xl text-white py-2 hover:scale-105 duration-300">
-                SignUp
-              </button>}
             </form>
 
             {/* <div className="flex"> */}

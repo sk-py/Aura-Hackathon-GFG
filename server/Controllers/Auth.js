@@ -3,6 +3,9 @@ const User = require("../Models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const key = "Aura";
+const expressAsyncHandler = require("express-async-handler");
+const nodemailer = require("nodemailer");
+const generateOTP = require("./generateOTP");
 
 const handleUserSignUp = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
@@ -104,4 +107,39 @@ const handleLogin = async (req, res) => {
   return res.status(400).send({ err: "User Not Found" });
 };
 
-module.exports = { handleLogin, handleRecruiterSignUp, handleUserSignUp };
+let transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: "587",
+  secure: false,
+  auth: {
+    user: "aurahackfest@gmail.com",
+    pass: "hocw ecta hgub kpzo",
+  },
+});
+
+const sendOtp = expressAsyncHandler(async (req, res) => {
+  const { email } = req.body;
+  console.log(email);
+
+  const otp = generateOTP();
+  globalotp=otp;
+  
+  var mailOptions = {
+    from: "aurahackfest@gmail.com",
+    to: email,
+    subject: "OTP form Callback Coding",
+    text: `Your OTP is: ${otp}`,
+  };
+  
+  console.log(otp)
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent successfully!");
+      res.json({"otp":otp})
+    }
+  });
+});
+
+module.exports = { handleLogin, handleRecruiterSignUp, handleUserSignUp ,sendOtp };
