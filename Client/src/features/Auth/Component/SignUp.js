@@ -221,12 +221,16 @@ export default function SignUp() {
                       </p>
                     )}
                   </div>
+
                 </>
               )}
-              <div className="bg-[#0b70ff] text-center rounded-xl text-white py-2 hover:scale-105 duration-300" 
+            {
+              !isOtpSend&&isOtpVerified?<button className="bg-[#0b70ff] text-center rounded-xl text-white py-2 hover:scale-105 duration-300">SignIn</button>: <div className="bg-[#0b70ff] text-center rounded-xl text-white py-2 hover:scale-105 duration-300" 
               onClick={isOtpSend?verifyotp:sendOtp}>
-                {isOtpSend ? "Verify" : "Send otp"}
+                {isOtpSend? "Verify": "Send otp"}
               </div>
+            }
+             
             </form>
 
             {/* <div className="flex"> */}
