@@ -37,5 +37,6 @@ export const { setData} = authSlice.actions;
 
 export const selectLoggedIn = (state) => state.auth.loggedIn;
 export const selectAccountType = (state) => state.auth.type;
+export const selectUserDetail = (state) => state.auth.userDetail;
 
 export default authSlice.reducer;

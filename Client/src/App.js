@@ -5,12 +5,14 @@ import JobDetailsPage from "./Pages/JobDetailsPage";
 import LoginPage from "./Pages/LoginPage";
 import MyApplicationPage from "./Pages/MyApplicationPage";
 import SignUpPage from "./Pages/SignUpPage";
-import { ToastContainer} from 'react-toastify';
-  import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import PostSignUpPage from "./Pages/PostSignUpPage";
 import FreelancePage from "./Pages/FreelancePage";
 import JobPage from "./Pages/JobPage";
 import AboutPage from "./Pages/AboutPage";
+import ProfilePage from "./Pages/ProfilePage";
+import HireFreelancerForm from "./Pages/HireFreelancerForm";
 
 const router = createBrowserRouter([
   {
@@ -46,13 +48,20 @@ const router = createBrowserRouter([
     element: <FreelancePage></FreelancePage>,
   },
   {
-    path:"/about",
-    element:<AboutPage></AboutPage>
-  }
+    path: "/about",
+    element: <AboutPage></AboutPage>,
+  },
+  {
+    path: "/profile",
+    element: <ProfilePage></ProfilePage>,
+  },
+  {
+    path: "/hirefreelancer",
+    element: <HireFreelancerForm></HireFreelancerForm>,
+  },
 ]);
 
 function App() {
- 
   return (
     <>
       <RouterProvider router={router} />

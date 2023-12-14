@@ -2,13 +2,19 @@ import React from "react";
 import Logo from "../../assets/logo.png";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectLoggedIn,selectAccountType } from "../Auth/AuthSlice";
+import {
+  selectLoggedIn,
+  selectAccountType,
+  selectUserDetail,
+} from "../Auth/AuthSlice";
 
 // #0b70ff
 // #e2eaf8
 export default function Navbar() {
   const loginStatus = useSelector(selectLoggedIn);
   const loginType = useSelector(selectAccountType);
+  const userDetails = useSelector(selectUserDetail);
+  console.log(userDetails);
   const toggleMenu = () => {
     if (
       document
@@ -58,12 +64,32 @@ export default function Navbar() {
         </ul>
         <ul className="hidden lg:flex items-center gap-5">
           {loginStatus ? (
-            <Link
-              to="/profile"
-              className="text-[#1967d2] bg-[#e2eaf8] px-2 py-1 rounded-md hover:bg-blue-700 hover:text-white transition-colors duration-300 ease-in cursor-pointer"
-            >
-              Profile
-            </Link>
+            <>
+              <div className="relative flex gap-1 text-[#1967d2] bg-[#e2eaf8] px-2 py-1 rounded-mdhover:text-white cursor-pointer">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                </svg>
+
+                {userDetails.firstName}
+                <ul className="absolute  top-10 w-max right-0 p-3 bg-gray-200 rounded-md space-y-2">
+                  <Link to="/profile" className="px-1 block transition-all duration-150 rounded hover:bg-white">Profile</Link>
+                  
+                  <Link to="/hirefreelancer" className="px-1 block transition-all duration-150 rounded hover:bg-white">Hire Freelancer</Link>
+                  <li className="px-1 block transition-all duration-150 rounded hover:bg-red-500 hover:text-white text-red-500">Log Out</li>
+                  </ul>
+              </div>
+            </>
           ) : (
             <Link
               to="/login"
