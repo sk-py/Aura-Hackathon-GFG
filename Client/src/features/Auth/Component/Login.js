@@ -4,25 +4,25 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { setData, selectLoggedIn } from "../AuthSlice";
+import { setData, selectLoggedIn,setLocal } from "../AuthSlice";
 
 export default function Login() {
-  const loggedIn = useSelector(selectLoggedIn);
+  const localdata = useSelector((state) => state.auth.localDetail);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  if (localdata) {
+    navigate("/");
+  }
   const {
     register,
     handleSubmit,
     // watch,
     formState: { errors },
   } = useForm();
-
-  useEffect(() => {
-    if (loggedIn) {
-      // eslint-disable-next-line
-      navigate("/");
-    }
-  }, [loggedIn]);
+  
+  // useEffect(() => {
+  //   // navigate("/")
+  // },[]);
 
   const submitAction = async (data) => {
     try {
@@ -31,11 +31,12 @@ export default function Login() {
         data
       );
       if (response.status === 200) {
-        localStorage.setItem("userId",response.data.user._id);
-        localStorage.setItem("auth-token",response.data.authToken);
+        localStorage.setItem("userId", response.data.user._id);
+        localStorage.setItem("auth-token", response.data.authToken);
         dispatch(setData({ ...response.data, type: response.data.user.type }));
         toast.success(`Logged in sucessfully ${response.data.user.firstName}`);
-        
+        callApi();
+        navigate("/");
       }
     } catch (error) {
       toast.error(error.response.data.err);
@@ -48,6 +49,15 @@ export default function Login() {
   const handleHide = () => {
     document.getElementsByName("password")[0].setAttribute("type", "password");
   };
+  const callApi = async () => {
+    const res = await axios.post("http://localhost:9000/tokenVerify", {
+      token: localStorage.getItem("auth-token"),
+    });
+    console.log(res.data);
+    dispatch(setLocal({ ...res.data }));
+  };
+  useEffect(() => {
+  }, []);
   return (
     <div>
       <section className="min-h-[70vh] lg:min-h-[80vh] flex items-center justify-center">

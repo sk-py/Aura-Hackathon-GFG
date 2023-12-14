@@ -5,6 +5,7 @@ const initialState = {
   loggedIn: false,
   type: null,
   userDetail: null,
+  localDetail:null,
 };
 
 // export const incrementAsync = createAsyncThunk(
@@ -30,10 +31,13 @@ export const authSlice = createSlice({
       state.loggedIn = true;
       state.userDetail = action.payload.user;
     },
+    setLocal: (state, action) => {
+      state.localDetail = action.payload;
+    },
   },
 });
 
-export const { setData} = authSlice.actions;
+export const { setData,setLocal} = authSlice.actions;
 
 export const selectLoggedIn = (state) => state.auth.loggedIn;
 export const selectAccountType = (state) => state.auth.type;

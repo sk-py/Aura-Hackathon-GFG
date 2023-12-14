@@ -1,24 +1,28 @@
 import React, { useState } from "react";
 import Logo from "../../assets/logo.png";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
 import {
   selectLoggedIn,
   selectAccountType,
   selectUserDetail,
+  setLocal,
 } from "../Auth/AuthSlice";
-
 // #0b70ff
 // #e2eaf8
 export default function Navbar() {
-  const [smallMenu,setSmallMenu] = useState(false)
+  const loacalData = useSelector((state=>state.auth.localDetail));
+  const dispatch = useDispatch();
+  const [smallMenu, setSmallMenu] = useState(false);
   const loginStatus = useSelector(selectLoggedIn);
+  const localDetail = useSelector((state) => state.auth.localDetail);
   const loginType = useSelector(selectAccountType);
   const userDetails = useSelector(selectUserDetail);
   // console.log(userDetails);
-  const handleSmallMenu = () =>{
-    document.getElementById("smallMenu").classList.toggle("hidden")
-  }
+  const handleSmallMenu = () => {
+    document.getElementById("smallMenu").classList.toggle("hidden");
+  };
   const toggleMenu = () => {
     if (
       document
@@ -67,9 +71,12 @@ export default function Navbar() {
           </Link>
         </ul>
         <ul className="hidden lg:flex items-center gap-5">
-          {loginStatus ? (
+          {localDetail?._id ? (
             <>
-              <div onClick={handleSmallMenu} className="relative flex gap-1 text-[#1967d2] bg-[#e2eaf8] px-2 py-1 rounded-mdhover:text-white cursor-pointer">
+              <div
+                onClick={handleSmallMenu}
+                className="relative flex gap-1 text-[#1967d2] bg-[#e2eaf8] px-2 py-1 rounded-mdhover:text-white cursor-pointer"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -85,15 +92,34 @@ export default function Navbar() {
                   />
                 </svg>
 
-                {userDetails.firstName}
-                <ul id="smallMenu" className="hidden absolute  top-10 w-max right-0 p-3 bg-gray-200 rounded-md space-y-2">
-                  <Link to="/profile" className="px-1 block transition-all duration-150 rounded hover:bg-white">Profile</Link>
-                  
-                  <Link to="/hirefreelancer" className="px-1 block transition-all duration-150 rounded hover:bg-white">Hire Freelancer</Link>
-                  <li className="px-1 block transition-all duration-150 rounded hover:bg-red-500 hover:text-white text-red-500" onClick={()=>{
-                    localStorage.removeItem("token");
-                  }}>Log Out</li>
-                  </ul>
+                {localDetail.firstName}
+                <ul
+                  id="smallMenu"
+                  className="hidden absolute  top-10 w-max right-0 p-3 bg-gray-200 rounded-md space-y-2"
+                >
+                  <Link
+                    to="/profile"
+                    className="px-1 block transition-all duration-150 rounded hover:bg-white"
+                  >
+                    Profile
+                  </Link>
+
+                  <Link
+                    to="/hirefreelancer"
+                    className="px-1 block transition-all duration-150 rounded hover:bg-white"
+                  >
+                    Hire Freelancer
+                  </Link>
+                  <li
+                    className="px-1 block transition-all duration-150 rounded hover:bg-red-500 hover:text-white text-red-500"
+                    onClick={() => {
+                      localStorage.removeItem("auth-token");
+                      dispatch(setLocal(null));
+                    }}
+                  >
+                    Log Out
+                  </li>
+                </ul>
               </div>
             </>
           ) : (

@@ -1,8 +1,10 @@
 const UserModel = require("../Models/User");
+const ProjectModel = require("../Models/Projects");
 
 const addNewProjects = async (req, res) => {
   const { projectName, description, link, userId } = req.body;
-  if (!projectName || !projectName || !link || !userId) {
+  console.log(req.body);
+  if (!projectName || !description || !link || !userId) {
     res.status(400).json({ err: "Invalid request body" });
   }
 
@@ -13,7 +15,7 @@ const addNewProjects = async (req, res) => {
     userId,
   };
 
-  const NewProject = await Experience.create(ProjectObj);
+  const NewProject = await ProjectModel.create(ProjectObj);
 
   const User = await UserModel.findOne({ userId: UserModel._id });
 
@@ -23,7 +25,7 @@ const addNewProjects = async (req, res) => {
 
   // axios.get(`http://localhost:9000/api/projects/get-all-projects/${userId}`);
  
-};
+};  
 
 
 

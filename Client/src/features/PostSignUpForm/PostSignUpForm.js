@@ -9,39 +9,26 @@ export default function PostSignUpForm() {
   const [formState, setFormState] = useState({});
   const navigate = useNavigate();
   const [project, setProject] = useState([
-    {
-      name: "Ecommerce App",
-      description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga, consequuntur quibusdam architecto, nisi, non dolore nulla iure sed facere quam repellendus modi labore deleniti voluptates rerum! Sed placeat porro itaque!",
-      url: "http://localhost:3000/postsignup",
-    },
-    {
-      name: "Ecommerce App",
-      description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga, consequuntur quibusdam architecto, nisi, non dolore nulla iure sed facere quam repellendus modi labore deleniti voluptates rerum! Sed placeat porro itaque!",
-      url: "http://localhost:3000/postsignup",
-    },
+    // {
+    //   name: "Ecommerce App",
+    //   description:
+    //     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga, consequuntur quibusdam architecto, nisi, non dolore nulla iure sed facere quam repellendus modi labore deleniti voluptates rerum! Sed placeat porro itaque!",
+    //   url: "http://localhost:3000/postsignup",
+    // },
+    // {
+    //   name: "Ecommerce App",
+    //   description:
+    //     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga, consequuntur quibusdam architecto, nisi, non dolore nulla iure sed facere quam repellendus modi labore deleniti voluptates rerum! Sed placeat porro itaque!",
+    //   url: "http://localhost:3000/postsignup",
+    // },
   ]);
-  const [experience, setExperience] = useState([
-    {
-      name: "Flipkart pvt Ltd",
-      description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga, consequuntur quibusdam architecto, nisi, non dolore nulla iure sed facere quam repellendus modi labore deleniti voluptates rerum! Sed placeat porro itaque!",
-      year: 1,
-    },
-    {
-      name: "Flipkart pvt Ltd",
-      description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga, consequuntur quibusdam architecto, nisi, non dolore nulla iure sed facere quam repellendus modi labore deleniti voluptates rerum! Sed placeat porro itaque!",
-      year: 1,
-    },
-  ]);
+  const [experience, setExperience] = useState([]);
   const handleFormChange = (e) => {
-    setFormState({ ...handleFormChange, [e.target.name]: e.target.value });
+    setFormState({ ...formState, [e.target.name]: e.target.value });
     console.log(formState);
   };
   const handleAddSkills = async () => {
-    console.log(formState.skill?.trim().length);
+    // console.log(formState.skill?.trim().length);
     if (formState.skill?.trim().length)  {
       const res = await axios.post(
         "http://localhost:9000/api/skills/add",
@@ -59,6 +46,42 @@ export default function PostSignUpForm() {
       toast.error("Skill can't be Empty");
     }
   };
+  const handleProjectAdd = async () =>{
+    const projectobj={projectName:formState.projectName, description:formState.description, link:formState.url }
+    console.log(formState)
+      const res = await axios.post(
+        "http://localhost:9000/api/projects/add",
+        // { skills: formState.skill},
+        projectobj,
+        {
+          headers: {
+            "auth-token": localStorage.getItem("auth-token"),
+          },
+        }
+      );
+      if (res.status == "201") {
+        setProject([...project, projectobj]);
+      }
+  }
+
+  const handleExperienceAdd = async () =>{
+    const expobj={companyName: formState.companyName, duration: formState.duration, position:formState.role}
+    console.log(formState)
+      const res = await axios.post(
+        "http://localhost:9000/api/experience/add",
+        // { skills: formState.skill},
+        expobj,
+        {
+          headers: {
+            "auth-token": localStorage.getItem("auth-token"),
+          },
+        }
+      );
+      if (res.status == "201") {
+        toast.success("done")
+        setExperience([...experience, expobj]);
+      }
+  }
   return (
     <>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -104,7 +127,7 @@ export default function PostSignUpForm() {
                   </label>
                   <button
                     className="mx-4 text-sm bg-green-500 text-white px-3 rounded-md py-1"
-                    // onClick={() => {}}
+                    onClick={handleProjectAdd}
                   >
                     Add
                   </button>
@@ -159,8 +182,8 @@ export default function PostSignUpForm() {
                       key={i}
                       className="col-span-3 space-y-2 p-4 border rounded-md"
                     >
-                      <h1 className="font-semibold">{data.name}</h1>
-                      <p>URL : {data.url}</p>
+                      <h1 className="font-semibold">{data.projectName}</h1>
+                      <p>URL:{data.url}</p>
                       <p>{data.description}</p>
                     </div>
                   );
@@ -176,7 +199,7 @@ export default function PostSignUpForm() {
                   </label>
                   <button
                     className="mx-4 text-sm bg-green-500 text-white px-3 rounded-md py-1"
-                    onClick={handleAddSkills}
+                    onClick={handleExperienceAdd}
                   >
                     Add
                   </button>
@@ -185,14 +208,12 @@ export default function PostSignUpForm() {
                 <div className="sm:col-span-full sm:grid grid-cols-2 gap-5">
                   <div className="mt-2">
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 ">
-                      <span className="flex select-none items-center pl-3 text-gray-500 sm:text-sm">
-                        Company name
-                      </span>
                       <input
                         onChange={handleFormChange}
                         type="text"
                         name="companyName"
                         id="companyName"
+                        placeholder="companyName"
                         autoComplete="companyName"
                         className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                       />
@@ -200,15 +221,13 @@ export default function PostSignUpForm() {
                   </div>
                   <div className="mt-2">
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 ">
-                      <span className="flex select-none items-center pl-3 text-gray-500 sm:text-sm">
-                        Job duration in year
-                      </span>
                       <input
                         onChange={handleFormChange}
                         type="text"
                         name="duration"
                         id="duration"
                         autoComplete="username"
+                        placeholder="Job duration"
                         className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                       />
                     </div>
@@ -231,12 +250,12 @@ export default function PostSignUpForm() {
                   return (
                     <div className="col-span-3 space-y-2 p-4 border rounded-md">
                       <div className="flex gap-4">
-                        <h1 className="font-semibold">{data.name}</h1>
+                        <h1 className="font-semibold">{data.companyName}</h1>
                         <p className="bg-gray-200 px-2 rounded-md">
-                          {data.year} year
+                          {data.duration}
                         </p>
                       </div>
-                      <p>{data.description}</p>
+                      <p>{data.role}</p>
                     </div>
                   );
                 })}

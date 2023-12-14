@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const dbConnect = require("./connection");
 const jwt = require("jsonwebtoken");
-const key ="aura"
+const key = "aura";
 const User = require("./Models/User");
 const bodyParser = require("body-parser");
 const authRoutes = require("./Routes/Auth");
@@ -37,10 +37,15 @@ app.post("/tokenVerify", async (req, res) => {
   const { token } = req.body;
   const payload = jwt.decode(token, key);
   if (payload) {
-      const user = await User.findOne({ email: payload.email });
-      if()
-      console.log(user);
-    return res.send("Sucess")
+    const user = await User.findOne({ email: payload.email });
+    if (user) {
+      return res.json(user);
+    } else {
+      return res.status(400);
+    }
+  }
+  else{
+    return res.status(400)
   }
   //   console.log(user);
   //   if (user) {
@@ -49,15 +54,14 @@ app.post("/tokenVerify", async (req, res) => {
   //     return res.status(401).json({ message: "invalid token" });
   // } else {
   //   return res.status(401).json({ message: "invalid token" });
-  }
-);
+});
 
 //Authentication Router
 app.use("/api/auth", authRoutes);
 app.use("/api/jobs", jobRoutes);
 app.use("/api/skills", getUserFromToken, skillRoutes);
 app.use("/api/experience", experienceRoutes);
-app.use("/api/projects", projectRoutes);
+app.use("/api/projects", getUserFromToken,projectRoutes);
 
 //Listening on specified PORT
 const port = 9000;

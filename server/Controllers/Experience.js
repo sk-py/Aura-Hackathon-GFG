@@ -5,7 +5,7 @@ const UserModel = require("../Models/User");
 const addNewExperience = async (req, res) => {
   const { companyName, position, duration, description, userId } = req.body;
   if (!companyName || !position || !duration || !userId) {
-    res.status(400).json({ err: "Invalid request body" });
+    return res.status(400).json({ err: "Invalid request body" });
   }
 
   const ExperienceObj = {
@@ -22,7 +22,7 @@ const addNewExperience = async (req, res) => {
 
   await User.experiences.push(NewExperience._id);
   await User.save();
-  res.status(201).json({ success: "Experience added succesfully" });
+  return res.status(201).json({ success: "Experience added succesfully" });
 };
 
 //Function for updating experiences

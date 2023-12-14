@@ -7,9 +7,10 @@ const {
   deleteExperience,
 } = require("../Controllers/Experience");
 const { route } = require("./Auth");
+const getUserFromToken = require("../controllers/Validator");
 
 //Router to add New Experience
-router.post("/add", addNewExperience);
+router.post("/add", getUserFromToken, addNewExperience);
 
 //Router to update existing Experience Data
 router.put("/update", updateExperience);

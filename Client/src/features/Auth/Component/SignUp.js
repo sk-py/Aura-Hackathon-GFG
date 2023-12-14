@@ -7,7 +7,7 @@ import { setData, selectLoggedIn } from "../AuthSlice";
 import { useSelector } from "react-redux";
 
 export default function SignUp() {
-  const loggedIn = useSelector(selectLoggedIn);
+  const localData = useSelector((state)=>state.auth.localDetail);
   const {
     register,
     handleSubmit,
@@ -65,8 +65,7 @@ export default function SignUp() {
   }
 
   useEffect(() => {
-    if (loggedIn) {
-      console.log(loggedIn);
+    if (localData) {
       // eslint-disable-next-line
       navigate("/");
     }
