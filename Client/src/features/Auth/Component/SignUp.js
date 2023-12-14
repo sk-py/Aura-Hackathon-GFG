@@ -83,11 +83,17 @@ export default function SignUp() {
           "http://localhost:9000/api/auth/user/signup",
           formData
         );
-        if (response.status === 201)
+        if (response.status === 201){
+          console.log(JSON.stringify(response.authtoken)+" "+response.userId)
+          localStorage.setItem("userId",JSON.stringify(response.data.user.userId))
+          localStorage.setItem("token",JSON.stringify(response.data.authtoken))
           toast.success("Account Created and Loggedin successFully");
         navigate("/postsignup");
+
+
+        }
       } catch (error) {
-        toast.error(error.response.data.err);
+        toast.error(error.response);
       }
     }
     

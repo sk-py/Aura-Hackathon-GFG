@@ -25,11 +25,16 @@ const handleUserSignUp = async (req, res) => {
     email,
     password: hashedPassword,
   });
-  let token = jwt.sign({ email }, key);
+
+  let token = await jwt.sign({ email }, key);
+  
+  const userId=newUser._id;
+
+  console.log(token)
   return res.status(201).json({
-    user: { type: "user", firstName, lastName, email },
+    user: { type: "user", firstName, lastName, email ,userId},
     authToken: token,
-  });
+  }); 
 };
 
 const handleRecruiterSignUp = async (req, res) => {

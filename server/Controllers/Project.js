@@ -1,4 +1,3 @@
-const Projects = require("../Models/Projects");
 const UserModel = require("../Models/User");
 
 const addNewProjects = async (req, res) => {
@@ -21,6 +20,20 @@ const addNewProjects = async (req, res) => {
   User.projects.push(NewProject._id);
   await User.save();
   res.status(201).json({ success: "Project added succesfully" });
+
+  // axios.get(`http://localhost:9000/api/projects/get-all-projects/${userId}`);
+ 
 };
 
-module.exports = { addNewProjects };
+
+
+const getProjects = async (req, res) => {
+  
+  const userId=req.prams.userId;
+  const projects = await UserModel.find({ userId:userId });
+
+  res.status(200).json({ userId, token, projects: projects });
+};
+
+
+module.exports = { addNewProjects ,getProjects };
