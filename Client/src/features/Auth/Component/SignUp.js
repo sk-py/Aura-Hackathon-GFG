@@ -84,9 +84,9 @@ export default function SignUp() {
           formData
         );
         if (response.status === 201){
-          console.log(JSON.stringify(response.authtoken)+" "+response.userId)
-          localStorage.setItem("userId",JSON.stringify(response.data.user.userId))
-          localStorage.setItem("token",JSON.stringify(response.data.authtoken))
+          console.log(response.data.authtoken+" "+response.data.userId)
+          // localStorage.setItem("userId",JSON.stringify(response.data.user.userId))
+          localStorage.setItem("token",JSON.stringify(response.data.token))
           toast.success("Account Created and Loggedin successFully");
         navigate("/postsignup");
 

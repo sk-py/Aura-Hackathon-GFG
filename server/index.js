@@ -10,6 +10,7 @@ const freelanceRoutes = require("./Routes/Freelance");
 const cookieParser = require("cookie-parser");
 const skillRoutes = require("./Routes/Skiils");
 const experienceRoutes = require("./Routes/Experience");
+const getUserFromToken = require("./controllers/Validator");
 //Calling Database Connection Function
 dbConnect();
 
@@ -23,14 +24,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 //Using Routes
-app.get("/", (req, res) => {
+app.get("/",getUserFromToken, (req, res) => {
+  req.header("auth-token");
   res.json("Server working perfectly");
 });
 
 //Authentication Router
 app.use("/api/auth", authRoutes);
 app.use("/api/jobs", jobRoutes);
-app.use("/api/skills,", skillRoutes);
+app.use("/api/skills",getUserFromToken, skillRoutes);
 app.use("/api/experience", experienceRoutes);
 app.use("/api/projects", projectRoutes);
 

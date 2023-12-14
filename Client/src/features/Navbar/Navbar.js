@@ -14,7 +14,7 @@ export default function Navbar() {
   const loginStatus = useSelector(selectLoggedIn);
   const loginType = useSelector(selectAccountType);
   const userDetails = useSelector(selectUserDetail);
-  console.log(userDetails);
+  // console.log(userDetails);
   const toggleMenu = () => {
     if (
       document
@@ -86,7 +86,9 @@ export default function Navbar() {
                   <Link to="/profile" className="px-1 block transition-all duration-150 rounded hover:bg-white">Profile</Link>
                   
                   <Link to="/hirefreelancer" className="px-1 block transition-all duration-150 rounded hover:bg-white">Hire Freelancer</Link>
-                  <li className="px-1 block transition-all duration-150 rounded hover:bg-red-500 hover:text-white text-red-500">Log Out</li>
+                  <li className="px-1 block transition-all duration-150 rounded hover:bg-red-500 hover:text-white text-red-500" onClick={()=>{
+                    localStorage.removeItem("token");
+                  }}>Log Out</li>
                   </ul>
               </div>
             </>

@@ -19,22 +19,19 @@ export default function Login() {
 
   useEffect(() => {
     if (loggedIn) {
-      console.log(loggedIn);
       // eslint-disable-next-line
       navigate("/");
     }
   }, [loggedIn]);
 
   const submitAction = async (data) => {
-    console.log(data);
     try {
       const response = await axios.post(
         "http://localhost:9000/api/auth/login",
         data
       );
-      console.log("Logging");
-      console.log(response.data.user.firstName);
       if (response.status === 200) {
+        localStorage.setItem("auth-token",response.data.authToken);
         dispatch(setData({ ...response.data, type: response.data.user.type }));
         toast.success(`Logged in sucessfully ${response.data.user.firstName}`);
       }

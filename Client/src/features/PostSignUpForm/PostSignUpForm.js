@@ -8,7 +8,7 @@ import axios from "axios";
 export default function PostSignUpForm() {
   const navigate = useNavigate();
 
-  const [skills, setSkills] = useState(["Html", "Css", "Java"]);
+  const [skills, setSkills] = useState([]);
   const [project, setProject] = useState([
     {
       name: "Ecommerce App",
@@ -45,9 +45,18 @@ export default function PostSignUpForm() {
   } = useForm();
   const handleAddSkills = () => {
     // console.log(document.getElementById("skill").value);
-    const arr = [...skills];
-    arr.push(document.getElementById("skill").value);
-    setSkills(arr);
+    const skilldata = document.getElementById("skill").value;
+    if (skilldata.trim().length != 0) {
+      const newSkills = [...skills];
+      newSkills.push(document.getElementById("skill").value);
+      // setSkills(newSkills);
+      const data = { skills: skilldata };
+      axios.post("http://localhost:9000/api/skills/add", data, {
+        headers: {
+          "auth-token": localStorage.getItem("auth-token"),
+        },
+      });
+    }
   };
   return (
     <>
@@ -66,8 +75,8 @@ export default function PostSignUpForm() {
                 className="rounded-md border-gray-300 p-1 sm:text-sm"
               />
               <button
-                className="mx-4 text-sm bg-green-500 text-white px-3 rounded-md py-1"
                 onClick={handleAddSkills}
+                className="mx-4 text-sm bg-green-500 text-white px-3 rounded-md py-1"
               >
                 Add
               </button>
@@ -101,13 +110,11 @@ export default function PostSignUpForm() {
                 <div className="sm:col-span-full sm:grid grid-cols-2 gap-5">
                   <div className="mt-2">
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 ">
-                      <span className="flex select-none items-center pl-3 text-gray-500 sm:text-sm">
-                        Project name
-                      </span>
                       <input
                         type="text"
                         name="username"
                         id="username"
+                        placeholder="project Name"
                         autoComplete="username"
                         className="block  flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                       />
@@ -115,15 +122,13 @@ export default function PostSignUpForm() {
                   </div>
                   <div className="mt-2">
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 ">
-                      <span className="flex select-none items-center pl-3 text-gray-500 sm:text-sm">
-                        Project Url
-                      </span>
                       <input
                         type="text"
                         name="username"
                         id="username"
                         autoComplete="username"
                         className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                        placeholder="project Url"
                       />
                     </div>
                   </div>

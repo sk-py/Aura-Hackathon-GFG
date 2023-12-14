@@ -2,19 +2,23 @@ const skillModel = require("../Models/Skills");
 const UserModel = require("../Models/User");
 
 const addNewSkills = async (req, res) => {
-  const { skill, userId } = req.body;
+  // console.log(req.body);
+  const { skills, userId } = req.body;
+  console.log("thisi i s skill", skills);
 
   const newSkill = await skillModel.create({
-    skillName,
+    skillsName: skills,
     userId,
   });
 
   if (!newSkill) {
     res.status(500).json({ err: "Unexpexted error occurred please try again" });
   }
-  const User = await UserModel.findOne({ userId: UserModel._id });
-
-  await User.skills.push(newSkill._id);
+  const User = await UserModel.findOne({ _id: userId });
+  console.log(newSkill._id);
+  const k = newSkill._id;
+  const a = await User.skills.push(k);
+  console.log(a);
   await User.save();
   res.status(201).json({ success: "Project added succesfully" });
 

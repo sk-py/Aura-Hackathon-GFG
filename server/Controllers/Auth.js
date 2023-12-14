@@ -30,10 +30,9 @@ const handleUserSignUp = async (req, res) => {
   
   const userId=newUser._id;
 
-  console.log(token)
   return res.status(201).json({
     user: { type: "user", firstName, lastName, email ,userId},
-    authToken: token,
+    token,
   }); 
 };
 
@@ -73,16 +72,17 @@ const handleLogin = async (req, res) => {
   if (userExists) {
     const verify = await bcrypt.compare(password, userExists.password);
     if (verify) {
-      let token = jwt.sign({ email: userExists.email }, key);
+      let token = await jwt.sign({ email: userExists.email }, key);
       return res.json({
+        authToken: token,
         user: {
           type: "user",
           firstName: userExists.firstName,
           lastName: userExists.lastName,
           email: userExists.email,
           companyName: userExists.companyName,
-        },
-        authToken: token,
+        }
+        // test:"test"
       });
     } else {
       return res.status(400).send({ err: "Invalid data" });
@@ -93,7 +93,7 @@ const handleLogin = async (req, res) => {
   if (recruiterExists) {
     const verify = await bcrypt.compare(password, recruiterExists.password);
     if (verify) {
-      let token = jwt.sign({ email: recruiterExists.email }, key);
+      let token = await jwt.sign({ email: recruiterExists.email }, key);
       return res.json({
         user: {
           type: "recruiter",
@@ -124,7 +124,6 @@ let transporter = nodemailer.createTransport({
 
 const sendOtp = expressAsyncHandler(async (req, res) => {
   const { email } = req.body;
-  console.log(email);
 
   const otp = generateOTP();
   globalotp=otp;
@@ -136,12 +135,9 @@ const sendOtp = expressAsyncHandler(async (req, res) => {
     text: `Your OTP is: ${otp}`,
   };
   
-  console.log(otp)
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
-      console.log(error);
     } else {
-      console.log("Email sent successfully!");
       res.json({"otp":otp})
     }
   });
