@@ -1,9 +1,14 @@
-import React, { useState } from "react";
-import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import {selectAccountType} from "../AuthSlice.js"
+import { useSelector } from "react-redux";
 
 export default function Profile() {
+  const userDetails = useSelector((state)=>state.auth.userDetail);
+  console.log(userDetails);
+  const [skillArray, setSkillArray] = useState([]);
   const navigate = useNavigate();
   const [projectForm, setProjectForm] = useState(false);
   const [experienceForm, setExperienceForm] = useState(false);
@@ -48,6 +53,25 @@ export default function Profile() {
     arr.push(document.getElementById("skill").value);
     setSkills(arr);
   };
+
+  const callApi = async () => {
+    try {
+      const res = await axios.get("http://localhost:9000/api/skills/display", {
+        headers: {
+          "auth-token": localStorage.getItem("auth-token"),
+        },
+      });
+      console.log(res.data);
+      setSkillArray(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    callApi();
+  }, []);
+
   return (
     <>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -55,8 +79,11 @@ export default function Profile() {
         <div>
           <div className="space-y-12">
             <div>
-                Name:Harsh Sharma
-                Email:exa
+              <p> Name:{userDetails?.firstName +" "+ userDetails?.lastName}</p> 
+              <p> Email:{userDetails.email}</p> 
+              {skillArray.map((data, i) => {
+                return <p>{data.skillsName}</p>;
+              })}
             </div>
             <div className="border-b border-gray-900/10 pb-12">
               <div className="mt-5 sm:grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-6">

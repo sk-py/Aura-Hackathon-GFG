@@ -4,7 +4,7 @@ const User = require("../Models/User");
 
 const getUserFromToken = async (req, res, next) => {
   const token = req.header("auth-token");
-  console.log(token);
+  // console.log(token);
 
   const payload = jwt.decode(token, key);
   if (payload) {
@@ -12,7 +12,7 @@ const getUserFromToken = async (req, res, next) => {
     if (user) {
       const userId = user._id;
       req.body.userId = userId;
-      console.log(user);
+      // console.log(user);
       next();
     } else {
       return res.status(401).json({ message: "invalid token" });

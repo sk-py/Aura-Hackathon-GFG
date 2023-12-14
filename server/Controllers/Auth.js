@@ -143,4 +143,6 @@ const sendOtp = expressAsyncHandler(async (req, res) => {
   });
 });
 
+
+
 module.exports = { handleLogin, handleRecruiterSignUp, handleUserSignUp ,sendOtp };

@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { setData, selectLoggedIn } from "../AuthSlice";
+import { useSelector } from "react-redux";
 
 export default function SignUp() {
+  const loggedIn = useSelector(selectLoggedIn);
   const {
     register,
     handleSubmit,
@@ -60,6 +63,14 @@ export default function SignUp() {
       toast.error("incorrect otp ")
     }
   }
+
+  useEffect(() => {
+    if (loggedIn) {
+      console.log(loggedIn);
+      // eslint-disable-next-line
+      navigate("/");
+    }
+  }, []);
 
   const submitAction = async (formData) => {
     console.log("Api calling");

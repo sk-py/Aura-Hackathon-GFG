@@ -31,9 +31,11 @@ export default function Login() {
         data
       );
       if (response.status === 200) {
+        localStorage.setItem("userId",response.data.user._id);
         localStorage.setItem("auth-token",response.data.authToken);
         dispatch(setData({ ...response.data, type: response.data.user.type }));
         toast.success(`Logged in sucessfully ${response.data.user.firstName}`);
+        
       }
     } catch (error) {
       toast.error(error.response.data.err);

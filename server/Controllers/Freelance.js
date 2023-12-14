@@ -45,7 +45,7 @@ const addFreelanceJob = async (req, res) => {
     res.status(500).json({
       err: "Internal Server Error, please try again",
     });
-    console.log("Error :", error.message);
+    // console.log("Error :", error.message);
   }
 };
 

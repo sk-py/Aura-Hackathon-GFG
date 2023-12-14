@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
-import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 // import Cookies from 'js-cookie';
 
 export default function PostSignUpForm() {
+  const [skillArray, setSkillArray] = useState([]);
+  const [formState, setFormState] = useState({});
   const navigate = useNavigate();
-
-  const [skills, setSkills] = useState([]);
   const [project, setProject] = useState([
     {
       name: "Ecommerce App",
@@ -37,25 +36,27 @@ export default function PostSignUpForm() {
       year: 1,
     },
   ]);
-  const {
-    register,
-    // handleSubmit,
-    // watch,
-    formState: { errors },
-  } = useForm();
-  const handleAddSkills = () => {
-    // console.log(document.getElementById("skill").value);
-    const skilldata = document.getElementById("skill").value;
-    if (skilldata.trim().length != 0) {
-      const newSkills = [...skills];
-      newSkills.push(document.getElementById("skill").value);
-      // setSkills(newSkills);
-      const data = { skills: skilldata };
-      axios.post("http://localhost:9000/api/skills/add", data, {
-        headers: {
-          "auth-token": localStorage.getItem("auth-token"),
-        },
-      });
+  const handleFormChange = (e) => {
+    setFormState({ ...handleFormChange, [e.target.name]: e.target.value });
+    console.log(formState);
+  };
+  const handleAddSkills = async () => {
+    console.log(formState.skill?.trim().length);
+    if (formState.skill?.trim().length)  {
+      const res = await axios.post(
+        "http://localhost:9000/api/skills/add",
+        { skills: formState.skill},
+        {
+          headers: {
+            "auth-token": localStorage.getItem("auth-token"),
+          },
+        }
+      );
+      if (res.status == "201") {
+        setSkillArray([...skillArray, formState.skill]);
+      }
+    } else {
+      toast.error("Skill can't be Empty");
     }
   };
   return (
@@ -69,8 +70,10 @@ export default function PostSignUpForm() {
                 Skills
               </h2>
               <input
+                onChange={handleFormChange}
                 type="text"
                 id="skill"
+                name="skill"
                 placeholder="Add your skills"
                 className="rounded-md border-gray-300 p-1 sm:text-sm"
               />
@@ -81,7 +84,7 @@ export default function PostSignUpForm() {
                 Add
               </button>
               <div className="space-x-5 mt-3">
-                {skills.map((data, i) => {
+                {skillArray.map((data, i) => {
                   return (
                     <span key={i} className="bg-gray-100 rounded-md px-3">
                       {data}
@@ -101,7 +104,7 @@ export default function PostSignUpForm() {
                   </label>
                   <button
                     className="mx-4 text-sm bg-green-500 text-white px-3 rounded-md py-1"
-                    onClick={handleAddSkills}
+                    // onClick={() => {}}
                   >
                     Add
                   </button>
@@ -111,9 +114,10 @@ export default function PostSignUpForm() {
                   <div className="mt-2">
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 ">
                       <input
+                        onChange={handleFormChange}
                         type="text"
-                        name="username"
-                        id="username"
+                        name="projectName"
+                        id="projectName"
                         placeholder="project Name"
                         autoComplete="username"
                         className="block  flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
@@ -123,9 +127,10 @@ export default function PostSignUpForm() {
                   <div className="mt-2">
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 ">
                       <input
+                        onChange={handleFormChange}
                         type="text"
-                        name="username"
-                        id="username"
+                        name="url"
+                        id="url"
                         autoComplete="username"
                         className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                         placeholder="project Url"
@@ -137,17 +142,23 @@ export default function PostSignUpForm() {
                 <div className="col-span-full">
                   <div className="mt-2">
                     <textarea
+                      onChange={(e) => {
+                        handleFormChange(e);
+                      }}
                       id="about"
-                      name="about"
+                      name="description"
                       rows={3}
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                       placeholder="Project Description"
                     />
                   </div>
                 </div>
-                {project.map((data) => {
+                {project.map((data, i) => {
                   return (
-                    <div className="col-span-3 space-y-2 p-4 border rounded-md">
+                    <div
+                      key={i}
+                      className="col-span-3 space-y-2 p-4 border rounded-md"
+                    >
                       <h1 className="font-semibold">{data.name}</h1>
                       <p>URL : {data.url}</p>
                       <p>{data.description}</p>
@@ -178,10 +189,11 @@ export default function PostSignUpForm() {
                         Company name
                       </span>
                       <input
+                        onChange={handleFormChange}
                         type="text"
-                        name="username"
-                        id="username"
-                        autoComplete="username"
+                        name="companyName"
+                        id="companyName"
+                        autoComplete="companyName"
                         className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                       />
                     </div>
@@ -192,9 +204,10 @@ export default function PostSignUpForm() {
                         Job duration in year
                       </span>
                       <input
+                        onChange={handleFormChange}
                         type="text"
-                        name="username"
-                        id="username"
+                        name="duration"
+                        id="duration"
                         autoComplete="username"
                         className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                       />
@@ -206,7 +219,8 @@ export default function PostSignUpForm() {
                   <div className="mt-2">
                     <textarea
                       id="about"
-                      name="about"
+                      onChange={handleFormChange}
+                      name="role"
                       rows={3}
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                       placeholder="Describe Your Job Role"
