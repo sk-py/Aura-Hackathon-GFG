@@ -8,6 +8,8 @@ const jobRoutes = require("./Routes/Jobs");
 const projectRoutes = require("./Routes/Projects");
 const freelanceRoutes = require("./Routes/Freelance");
 const cookieParser = require("cookie-parser");
+const skillRoutes = require("./Routes/Skiils");
+const experienceRoutes = require("./Routes/Experience");
 //Calling Database Connection Function
 dbConnect();
 
@@ -20,7 +22,6 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-
 //Using Routes
 app.get("/", (req, res) => {
   res.json("Server working perfectly");
@@ -29,7 +30,9 @@ app.get("/", (req, res) => {
 //Authentication Router
 app.use("/api/auth", authRoutes);
 app.use("/api/jobs", jobRoutes);
-app.use("/api/projects",projectRoutes)
+app.use("/api/skills,", skillRoutes);
+app.use("/api/experience", experienceRoutes);
+app.use("/api/projects", projectRoutes);
 
 //Listening on specified PORT
 const port = 9000;

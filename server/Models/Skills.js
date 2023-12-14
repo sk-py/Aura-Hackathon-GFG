@@ -2,7 +2,11 @@ const mongoose = require("mongoose");
 const skill = {
   skillsName: {
     type: String,
-    required: flase,
+    required: false,
+  },
+  userId: {
+    type: String,
+    required: false,
   },
 };
 

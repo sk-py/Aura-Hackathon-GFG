@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -6,8 +6,8 @@ import axios from "axios";
 // import Cookies from 'js-cookie';
 
 export default function PostSignUpForm() {
-  const navigate = useNavigate()
-  
+  const navigate = useNavigate();
+
   const [skills, setSkills] = useState(["Html", "Css", "Java"]);
   const [project, setProject] = useState([
     {
@@ -213,7 +213,9 @@ export default function PostSignUpForm() {
                     <div className="col-span-3 space-y-2 p-4 border rounded-md">
                       <div className="flex gap-4">
                         <h1 className="font-semibold">{data.name}</h1>
-                        <p className="bg-gray-200 px-2 rounded-md">{data.year} year</p>
+                        <p className="bg-gray-200 px-2 rounded-md">
+                          {data.year} year
+                        </p>
                       </div>
                       <p>{data.description}</p>
                     </div>
@@ -231,7 +233,9 @@ export default function PostSignUpForm() {
               Cancel
             </button>
             <button
-            onClick={()=>{navigate("/")}}
+              onClick={() => {
+                navigate("/");
+              }}
               type="submit"
               className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >

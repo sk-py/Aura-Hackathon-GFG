@@ -1,3 +1,4 @@
+const experienceModel = require("../Models/Experience");
 const FreelanceJobs = require("../Models/FreelanceJob");
 // const FreelanceFreelanceJobs = require("../Models/FreelanceJob");
 
@@ -8,7 +9,7 @@ const addFreelanceJob = async (req, res) => {
     payment,
     duration,
     responsibilities,
-    strequiredSkillsatus,
+    requiredSkills,
     postedBy,
   } = req.body;
 
@@ -29,7 +30,7 @@ const addFreelanceJob = async (req, res) => {
       payment,
       duration,
       responsibilities,
-      strequiredSkillsatus,
+      requiredSkills,
       postedBy,
     });
 
@@ -46,6 +47,23 @@ const addFreelanceJob = async (req, res) => {
     });
     console.log("Error :", error.message);
   }
+};
+
+const deleteFreelanceJob = async (req, res) => {
+  const { userId, experienceId } = req.body;
+  const result = await experienceModel.deleteOne({
+    userId: userId,
+    _id: experienceId,
+  });
+
+  if (!result) {
+    res.status(500).json({
+      err: "Internal Server Error, please try again",
+    });
+  }
+  res.status(201).json({
+    msg: " Freelance Job deleted successfully",
+  });
 };
 
 module.exports = { addFreelanceJob };

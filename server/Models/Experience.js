@@ -16,6 +16,9 @@ const experience = {
     type: String,
     required: false,
   },
+  userId: {
+    type: String,
+  },
 };
 
 const ExperienceSchema = mongoose.Schema(experience);

@@ -1,11 +1,23 @@
 const express = require("express");
 const router = express.Router();
-const { addNewExperience } = require("../Controllers/Experience");
+const {
+  addNewExperience,
+  getExperience,
+  updateExperience,
+  deleteExperience,
+} = require("../Controllers/Experience");
+const { route } = require("./Auth");
 
 //Router to add New Experience
 router.post("/add", addNewExperience);
 
 //Router to update existing Experience Data
-// router.put("/update",)
+router.put("/update", updateExperience);
+
+//Router to display user's Experience if added
+router.get("/getExperience/:userId", getExperience);
+
+//Route to delete user's Experience
+router.delete("/delete", deleteExperience);
 
 module.exports = router;

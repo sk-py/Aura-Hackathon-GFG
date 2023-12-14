@@ -4,5 +4,6 @@ const router = express.Router();
 
 //Route to create Freelance Jobs
 router.post("/add", addFreelanceJob);
+router.get("/getFreelanceJobs");
 
 module.exports = router;
