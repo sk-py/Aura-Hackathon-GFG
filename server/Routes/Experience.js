@@ -6,8 +6,7 @@ const {
   updateExperience,
   deleteExperience,
 } = require("../Controllers/Experience");
-const { route } = require("./Auth");
-const getUserFromToken = require("../controllers/Validator");
+const getUserFromToken = require("../Controllers/Validator");
 
 //Router to add New Experience
 router.post("/add", getUserFromToken, addNewExperience);
@@ -19,6 +18,6 @@ router.put("/update", updateExperience);
 router.get("/getExperience/:userId", getExperience);
 
 //Route to delete user's Experience
-router.delete("/delete", deleteExperience);
+router.delete("/delete", getUserFromToken, deleteExperience);
 
 module.exports = router;

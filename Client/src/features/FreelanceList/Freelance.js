@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect } from "react";
 import { Fragment, useState } from "react";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
+import axios from "axios";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import {
   ChevronDownIcon,
@@ -8,64 +9,164 @@ import {
   MinusIcon,
   PlusIcon,
   Squares2X2Icon,
+  Loading,
 } from "@heroicons/react/20/solid";
 import { Link } from "react-router-dom";
+// import { use } from "../../../../server/Routes/Auth";
 
 const sortOptions = [
   { name: "Most Recent", href: "#", current: false },
   { name: "Salary: Low to High", href: "#", current: false },
   { name: "Salary: High to Low", href: "#", current: false },
 ];
-const filters = [
-  {
-    id: "mode",
-    name: "Work Mode",
-    options: [
-      { value: "white", label: "Work from office", checked: false },
-      { value: "beige", label: "Remote", checked: false },
-      { value: "beige", label: "Hybrid", checked: false },
-    ],
-  },
-  {
-    id: "location",
-    name: "Location",
-    options: [
-      { value: "new-arrivals", label: "Mumbai", checked: false },
-      { value: "sale", label: "Pune", checked: false },
-      { value: "travel", label: "Delhi", checked: false },
-      { value: "organization", label: "Bangalore", checked: false },
-      { value: "accessories", label: "Hyderabad", checked: false },
-    ],
-  },
-  {
-    id: "department",
-    name: "Department",
-    options: [
-      { value: "2l", label: "IT and Development", checked: false },
-      { value: "6l", label: "Sales and Business", checked: false },
-      { value: "12l", label: "Customer Support", checked: false },
-      { value: "18l", label: "Hotel and tourism", checked: false },
-      { value: "20l", label: "Human Resource", checked: false },
-      { value: "40l", label: "Other", checked: false },
-    ],
-  },
-];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Freelance() {
+export default function Jobs() {
+  const [rows, setRows] = useState(0);
+  const [fetchedJobs, setFetchedJobs] = useState([]);
+  const [loading, setloading] = useState(true);
+  const [FilterApplied, setFilterApplied] = useState(false);
+  const [NoData, setNoData] = useState(false);
+  const [WorkLocation, setWorkLocation] = useState("");
+  const [JobType, setJobType] = useState("");
+  const [Level, setLevel] = useState("");
+  // const [fetchNow, setfetchNow] = useState(null);
+
+  const userSelections = {
+    workLocation: WorkLocation,
+    jobType: JobType,
+    level: Level,
+  };
+
+  // const handleChange = (e) => {
+  //   if (e.target.name == "mode[]") {
+  //     if (WorkLocation.length > 0) {
+  //       WorkLocation.includes(e.target.value)
+  //         ? setWorkLocation((prev) => {
+  //             return prev.filter((value) => value !== e.target.value);
+  //           })
+  //         : setWorkLocation((prev) => [...prev, e.target.value]);
+  //     } else {
+  //       setWorkLocation((prev) => [...prev, e.target.value]);
+  //     }
+  //   }
+  //   if (e.target.name == "location[]") {
+  //     if (JobType.length > 0) {
+  //       JobType.includes(e.target.value)
+  //         ? setJobType((prev) => {
+  //             return prev.filter((value) => value !== e.target.value);
+  //           })
+  //         : setJobType((prev) => [...prev, e.target.value]);
+  //     } else {
+  //       setJobType((prev) => [...prev, e.target.value]);
+  //     }
+  //   }
+  //   if (e.target.name == "department[]") {
+  //     if (Level.length > 0) {
+  //       Level.includes(e.target.value)
+  //         ? setLevel((prev) => {
+  //             return prev.filter((value) => value !== e.target.value);
+  //           })
+  //         : setLevel((prev) => [...prev, e.target.value]);
+  //     } else {
+  //       setLevel((prev) => [...prev, e.target.value]);
+  //     }
+  //   }
+  // };
+
+  // const ApplyFilters = async () => {
+  //   try {
+  //     const res = await fetch("http://localhost:9000/api/jobs/filter", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(userSelections),
+  //     });
+
+  //     // Assuming you want to work with JSON response, use res.json()
+  //     const data = await res.json();
+  //     data.length == 0 ? setNoData(true) : setNoData(false);
+  //     setFetchedJobs(data);
+  //     setloading(false);
+  //     // console.log("Filtered Data:", data);
+  //   } catch (err) {
+  //     console.error("Error fetching data:", err.message);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   // console.log("User Selection Object ", );
+  //   setloading(true);
+  //   // if()
+  //   ApplyFilters();
+  // }, [WorkLocation, JobType, Level]);
+
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  //Function for fetching data in limits and skips
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/api/freelance/getFreelanceJobs/${rows}`
+      );
+      // Assuming your API response contains an array of jobs in the 'data' property
+      const newData = response.data;
+      newData.length == 0 ? setNoData(true) : setNoData(false);
+      // setRows((prev) => prev + 5);
+      setFetchedJobs((prev) => [...prev, ...newData]);
+      setloading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error.message);
+    }
+  };
+  useEffect(() => {
+    !NoData && fetchData();
+  }, [rows]);
+
+  const handleScroll = () => {
+    const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+
+    if (scrollTop + clientHeight >= scrollHeight) {
+      setloading(true);
+      setRows((prev) => prev + 10);
+    }
+  };
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const fetchJobDataInitial = async () => {
+      try {
+        const initialData = await axios.get(
+          `http://192.168.43.66:9000/api/jobs/getjobs/${rows}`
+        );
+
+        const fetchedData = initialData.data;
+        setFetchedJobs((prev) => [...prev, ...fetchedData]);
+      } catch (error) {
+        console.error("Error fetching data:", error.message);
+      }
+    };
+
+    // fetchJobDataInitial();
+  }, []);
 
   return (
     <>
-    <form className="flex my-3 max-w-xl mx-auto px-2 gap-2 flex-wrap justify-center sm:flex-row">
+      {/* <div className="mx-5 bg-white p-0 rounded-xl shadow-xl md:shadow-none md:w-fit md:mx-auto"> */}
+
+      <form className="flex my-3 max-w-xl mx-auto px-2 gap-2 flex-wrap justify-center sm:flex-row">
         <div className="relative flex-grow flex items-center">
           <input
             className="border p-2 w-full rounded-xl border-gray-600"
             type="text"
-            placeholder="Search Freelance Projects"
+            placeholder="Search for jobs"
           />
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -86,7 +187,11 @@ export default function Freelance() {
           Search
         </button>
       </form>
-         <div className="bg-white">
+      {/* </div> */}
+
+      {/* Template */}
+
+      <div className="bg-white">
         <div>
           {/* Mobile filter dialog */}
           <Transition.Root show={mobileFiltersOpen} as={Fragment}>
@@ -133,7 +238,7 @@ export default function Freelance() {
                     </div>
 
                     {/* Filters */}
-                    <form className="mt-4 border-t border-gray-200">
+                    {/* <form className="mt-4 border-t border-gray-200">
                       {filters.map((section) => (
                         <Disclosure
                           as="div"
@@ -172,10 +277,13 @@ export default function Freelance() {
                                       <input
                                         id={`filter-mobile-${section.id}-${optionIdx}`}
                                         name={`${section.id}[]`}
-                                        defaultValue={option.value}
+                                        value={option.value}
                                         type="checkbox"
                                         defaultChecked={option.checked}
                                         className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                        onChange={(e) => {
+                                          console.log(e.target.value);
+                                        }}
                                       />
                                       <label
                                         htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
@@ -191,7 +299,7 @@ export default function Freelance() {
                           )}
                         </Disclosure>
                       ))}
-                    </form>
+                    </form> */}
                   </Dialog.Panel>
                 </Transition.Child>
               </div>
@@ -199,8 +307,10 @@ export default function Freelance() {
           </Transition.Root>
 
           <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-0">
-            <h1 className="text-2xl font-semibold tracking-tight text-gray-900">All Freelance Projects</h1>
+            <div className="flex items-center justify-between border-b border-gray-200 pb-6 pt-0">
+              <h1 className="text-2xl font-semibold tracking-tight text-gray-900 ">
+                All Freelance Jobs / Projects
+              </h1>
               <div></div>
 
               <div className="flex items-center">
@@ -267,14 +377,17 @@ export default function Freelance() {
               </div>
             </div>
 
-            <section aria-labelledby="products-heading" className="pb-24 pt-6">
+            <section
+              aria-labelledby="products-heading"
+              className="pb-24 pt-6 items-center"
+            >
               <h2 id="products-heading" className="sr-only">
                 Products
               </h2>
 
-              <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
+              <div className="grid place-items-center grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-1">
                 {/* Filters */}
-                <form className="hidden lg:block">
+                {/* <form className="hidden lg:block">
                   {filters.map((section) => (
                     <Disclosure
                       as="div"
@@ -316,6 +429,9 @@ export default function Freelance() {
                                     defaultValue={option.value}
                                     type="checkbox"
                                     defaultChecked={option.checked}
+                                    onChange={(e) => {
+                                      handleChange(e);
+                                    }}
                                     className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                   />
                                   <label
@@ -332,96 +448,123 @@ export default function Freelance() {
                       )}
                     </Disclosure>
                   ))}
-                </form>
+                </form> */}
 
                 {/* Product grid */}
-                <div className="space-y-4 divide-y-2 lg:col-span-3">
+                <div className="space-y-4 justify-center  w-[99%] lg:w-[70%] divide-y-2 lg:col-span-3">
                   {/* Your content */}
-                  {filters[1].options.map((a, b) => {
+                  {fetchedJobs.map((job) => {
                     return (
-                      <Link to="/jobdetails" key={b}>
-                      <div className="flex justify-between p-3 items-start gap-2">
-                        <div>
-                          <h2 className="text-indigo-600 font-semibold md:text-lg">
-                            Front End Developer
-                          </h2>
-                          <h3 className="text-xs md:text-sm">
-                            Renesas Electronics India Pvt. Ltd.
-                          </h3>
+                      <Link
+                        to={`/api/freelance/details/${job._id}`}
+                        key={job._id}
+                      >
+                        <div className="flex justify-between p-3 items-center gap-2 hover:bg-slate-50">
+                          <div>
+                            <h2 className="text-indigo-600 font-semibold md:text-lg">
+                              {job.projectName}
+                            </h2>
+                            <h3 className="text-xs md:text-sm">
+                              {job.postedBy[1]}
+                            </h3>
 
-                          <div className="flex divide-x-2">
-                            <div className="pe-5">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth="1.5"
-                                stroke="currentColor"
-                                className="w-4 h-4 me-1 inline-block"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M15 8.25H9m6 3H9m3 6l-3-3h1.5a3 3 0 100-6M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                />
-                              </svg>
-                              <span className="align-middle text-sm">
-                                3.6L - 6L
-                              </span>
-                            </div>
-                            <div className="px-5">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth="1.5"
-                                stroke="currentColor"
-                                className="w-4 h-4 inline-block me-1"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z"
-                                />
-                              </svg>
-                              <span className="align-middle text-sm">2Y</span>
+                            <div className="flex divide-x-2">
+                              <div className="pe-5">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth="1.5"
+                                  stroke="currentColor"
+                                  className="w-4 h-4 me-1 inline-block"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M15 8.25H9m6 3H9m3 6l-3-3h1.5a3 3 0 100-6M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                  />
+                                </svg>
+                                <span className="align-middle text-sm">
+                                  {job.payment}
+                                </span>
+                              </div>
+                              <div className="px-5">
+                                {/* <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth="1.5"
+                                  stroke="currentColor"
+                                  className="w-4 h-4 inline-block me-1"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z"
+                                  />
+                                </svg> */}
+                                {/* <span className="align-middle text-xs">
+                                  {job.type.level}
+                                  level
+                                </span> */}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="flex flex-col items-center gap-1">
-                          <p className="bg-green-50 text-green-600 px-2 rounded-lg truncate text-xs md:text-sm">
-                            Full-time
-                          </p>
-                          <div className="my-auto">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke-width="1.5"
-                              stroke="currentColor"
-                              class="w-4 h-4 inline-block mr-1"
-                            >
-                              <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
-                              />
-                              <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
-                              />
-                            </svg>
-
-                            <p className="align-middle inline-block text-xs md:text-sm">
-                              Remote
+                          <div className="flex flex-col items-center gap-2">
+                            <p className="bg-green-50 text-green-600 px-2 rounded-lg truncate text-xs md:text-sm">
+                              {job.status}
                             </p>
+                            <div className="mt-[0.85rem] flex flex-row gap-2">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                height="14"
+                                width="12"
+                                viewBox="0 0 384 512"
+                                className="mt-1"
+                              >
+                                <path d="M0 32C0 14.3 14.3 0 32 0H64 320h32c17.7 0 32 14.3 32 32s-14.3 32-32 32V75c0 42.4-16.9 83.1-46.9 113.1L237.3 256l67.9 67.9c30 30 46.9 70.7 46.9 113.1v11c17.7 0 32 14.3 32 32s-14.3 32-32 32H320 64 32c-17.7 0-32-14.3-32-32s14.3-32 32-32V437c0-42.4 16.9-83.1 46.9-113.1L146.7 256 78.9 188.1C48.9 158.1 32 117.4 32 75V64C14.3 64 0 49.7 0 32zM96 64V75c0 25.5 10.1 49.9 28.1 67.9L192 210.7l67.9-67.9c18-18 28.1-42.4 28.1-67.9V64H96zm0 384H288V437c0-25.5-10.1-49.9-28.1-67.9L192 301.3l-67.9 67.9c-18 18-28.1 42.4-28.1 67.9v11z" />
+                              </svg>
+
+                              <p className="align-middle inline-block text-xs md:text-sm">
+                                {job.duration}
+                              </p>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </Link>
+                      </Link>
                     );
                   })}
+                  <center>
+                    {NoData && !fetchedJobs.length > 0 && (
+                      <span>No freelance posts available for now</span>
+                    )}
+                    {loading && !NoData ? (
+                      <div class=" left-1/2 mt-10 -ml-2 h-8 w-4 text-indigo-700">
+                        <div class=" z-10 -ml-2 h-8 w-8 animate-bounce">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="animate-spin"
+                            fill="currentColor"
+                            stroke="currentColor"
+                            stroke-width="0"
+                            viewBox="0 0 16 16"
+                          >
+                            <path d="M8 0c-4.418 0-8 3.582-8 8s3.582 8 8 8 8-3.582 8-8-3.582-8-8-8zM8 4c2.209 0 4 1.791 4 4s-1.791 4-4 4-4-1.791-4-4 1.791-4 4-4zM12.773 12.773c-1.275 1.275-2.97 1.977-4.773 1.977s-3.498-0.702-4.773-1.977-1.977-2.97-1.977-4.773c0-1.803 0.702-3.498 1.977-4.773l1.061 1.061c0 0 0 0 0 0-2.047 2.047-2.047 5.378 0 7.425 0.992 0.992 2.31 1.538 3.712 1.538s2.721-0.546 3.712-1.538c2.047-2.047 2.047-5.378 0-7.425l1.061-1.061c1.275 1.275 1.977 2.97 1.977 4.773s-0.702 3.498-1.977 4.773z"></path>
+                          </svg>
+                        </div>
+                        <div
+                          class="absolute top-4 h-5 w-4 animate-bounce border-l-2 border-gray-200"
+                          // style="rotate: -90deg"
+                        ></div>
+                        <div
+                          class="absolute top-4 h-5 w-4 animate-bounce border-r-2 border-gray-200"
+                          // style="rotate: 90deg"
+                        ></div>
+                      </div>
+                    ) : (
+                      " "
+                    )}
+                  </center>
                 </div>
               </div>
             </section>
@@ -429,5 +572,5 @@ export default function Freelance() {
         </div>
       </div>
     </>
-  )
+  );
 }

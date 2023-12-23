@@ -2,29 +2,33 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-export default function JobDetails() {
+export default function FreelanceDetails() {
   const { Id } = useParams();
   const [loading, setloading] = useState(true);
   const userId = localStorage.getItem("userId");
   const [JobDetails, setJobDetails] = useState([]);
+  const [DataIndicator, setDataIndicator] = useState("Job_Data");
   // console.log("jobDetails from details page", Id);
   const getJobDetails = async () => {
     try {
       const JobsData = await fetch(
-        `http://localhost:9000/api/jobs/jobdetails/${Id}`
+        `http://localhost:9000/api/freelance/getFreelanceDetails/${Id}`
       );
       const fetchedJobDetail = await JobsData.json();
       // fetchedJobs;
       setJobDetails(fetchedJobDetail);
       setloading(false);
-      console.log("fetchedJobs details :", fetchedJobDetail);
     } catch (error) {
       console.log("error", error.message);
     }
   };
   useEffect(() => {
     getJobDetails();
+    if (JobDetails.projectName) {
+      setDataIndicator("Freelance_Data");
+    }
   }, []);
+  console.log("Indic", DataIndicator);
 
   const createApplication = async () => {
     try {
@@ -34,8 +38,9 @@ export default function JobDetails() {
         body: JSON.stringify({
           auth_token: localStorage.getItem("auth-token"),
           jobId: Id,
-          companyName: JobDetails.companyName,
-          role: JobDetails.role,
+          projectName: JobDetails.projectName,
+          postedBy: JobDetails.postedBy,
+          indicator: DataIndicator,
           appliedDate: date.toLocaleDateString(),
         }),
         headers: {
@@ -47,7 +52,7 @@ export default function JobDetails() {
       res.status === 409
         ? toast.info("Already applied for this post")
         : res.status === 200
-        ? toast.success("Application created successfully..!!")
+        ? toast.success("Connection request sent !")
         : toast.error("Unable to apply, please try again later.");
     } catch (error) {
       console.log("error", error.message);
@@ -60,33 +65,28 @@ export default function JobDetails() {
       <div className="p-5 py-8 space-y-6 lg:flex justify-between bg-[#f4f6fc] lg:p-20 items-center">
         <div className="space-y-3 lg:flex lg:space-y-0 gap-5 items-center">
           <div className="bg-black text-white w-14 h-14 text-3xl lg:w-20 lg:h-20 rounded-md flex lg:text-5xl justify-center items-center">
-            {JobDetails.companyName.substring(0, 2)}
+            {JobDetails.projectName.substring(0, 2)}
           </div>
           <div className="space-y-4 lg:space-y-3">
             <h1 className="font-semibold text-2xl">
-              {JobDetails.role} - {JobDetails.companyName}
+              {JobDetails.projectName} - {JobDetails.postedBy[1]}
             </h1>
             <ul className="gap-x-5 gap-y-1 flex lg:gap-6 flex-wrap">
               <li className="flex items-center gap-2">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="w-5 h-5 "
+                  height="14"
+                  width="12"
+                  viewBox="0 0 384 512"
+                  //   className="mt-1"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z"
-                  />
+                  <path d="M0 32C0 14.3 14.3 0 32 0H64 320h32c17.7 0 32 14.3 32 32s-14.3 32-32 32V75c0 42.4-16.9 83.1-46.9 113.1L237.3 256l67.9 67.9c30 30 46.9 70.7 46.9 113.1v11c17.7 0 32 14.3 32 32s-14.3 32-32 32H320 64 32c-17.7 0-32-14.3-32-32s14.3-32 32-32V437c0-42.4 16.9-83.1 46.9-113.1L146.7 256 78.9 188.1C48.9 158.1 32 117.4 32 75V64C14.3 64 0 49.7 0 32zM96 64V75c0 25.5 10.1 49.9 28.1 67.9L192 210.7l67.9-67.9c18-18 28.1-42.4 28.1-67.9V64H96zm0 384H288V437c0-25.5-10.1-49.9-28.1-67.9L192 301.3l-67.9 67.9c-18 18-28.1 42.4-28.1 67.9v11z" />
                 </svg>
                 <p className="text-stone-700 text-base">
-                  {JobDetails.type.level}
+                  {JobDetails.duration}
                 </p>
               </li>
-              <li className="flex items-center gap-2">
+              {/* <li className="flex items-center gap-2">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -108,7 +108,7 @@ export default function JobDetails() {
                 </svg>
 
                 <p className="text-stone-700 text-base">London, UK</p>
-              </li>
+              </li> */}
               <li className="flex items-center gap-2">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -143,12 +143,10 @@ export default function JobDetails() {
                     d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z"
                   />
                 </svg>
-                <p className="text-stone-700 text-base">
-                  {JobDetails.package[0]} - {JobDetails.package[1]}
-                </p>
+                <p className="text-stone-700 text-base">{JobDetails.payment}</p>
               </li>
             </ul>
-            <ul className="flex gap-3 flex-wrap">
+            {/* <ul className="flex gap-3 flex-wrap">
               <li className="text-sm bg-blue-200 text-blue-700 px-4 py-1 rounded-3xl">
                 {JobDetails.type.jobType}
               </li>
@@ -158,7 +156,7 @@ export default function JobDetails() {
               <li className="text-sm bg-orange-200 text-orange-700 px-4 py-1 rounded-3xl">
                 {JobDetails.type.level}
               </li>
-            </ul>
+            </ul> */}
           </div>
         </div>
 
@@ -167,7 +165,7 @@ export default function JobDetails() {
             className="bg-[#1967d2] text-white px-10 py-3 rounded-md"
             onClick={createApplication}
           >
-            Apply For Job
+            Connect with client
           </button>
           {/* <button className="bg-[#e2eaf8] text-[#1967d2] px-3 py-3 rounded-md">
             <svg
@@ -295,27 +293,17 @@ export default function JobDetails() {
             <div className="flex items-center gap-5">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className="w-6 h-6  text-[#0b70ff]"
+                height="20"
+                width="20"
+                viewBox="0 0 384 512"
+                className="fill-blue-500"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
-                />
+                <path d="M0 32C0 14.3 14.3 0 32 0H64 320h32c17.7 0 32 14.3 32 32s-14.3 32-32 32V75c0 42.4-16.9 83.1-46.9 113.1L237.3 256l67.9 67.9c30 30 46.9 70.7 46.9 113.1v11c17.7 0 32 14.3 32 32s-14.3 32-32 32H320 64 32c-17.7 0-32-14.3-32-32s14.3-32 32-32V437c0-42.4 16.9-83.1 46.9-113.1L146.7 256 78.9 188.1C48.9 158.1 32 117.4 32 75V64C14.3 64 0 49.7 0 32zM96 64V75c0 25.5 10.1 49.9 28.1 67.9L192 210.7l67.9-67.9c18-18 28.1-42.4 28.1-67.9V64H96zm0 384H288V437c0-25.5-10.1-49.9-28.1-67.9L192 301.3l-67.9 67.9c-18 18-28.1 42.4-28.1 67.9v11z" />
               </svg>
 
               <div>
-                <h3 className="font-semibold">Location:</h3>
-                <p>{JobDetails.type.workLocation}</p>
+                <h3 className="font-semibold">Duration:</h3>
+                <p>{JobDetails.duration}</p>
               </div>
             </div>
             <div className="flex items-center gap-5">
@@ -336,7 +324,7 @@ export default function JobDetails() {
 
               <div>
                 <h3 className="font-semibold">Job Title:</h3>
-                <p>{JobDetails.role}</p>
+                <p>{JobDetails.projectName}</p>
               </div>
             </div>
             <div className="flex items-center gap-5">
@@ -356,11 +344,8 @@ export default function JobDetails() {
               </svg>
 
               <div>
-                <h3 className="font-semibold">Salary:</h3>
-                <p>
-                  {" "}
-                  {JobDetails.package[0]} - {JobDetails.package[1]}
-                </p>
+                <h3 className="font-semibold">Payment:</h3>
+                <p> {JobDetails.payment}</p>
               </div>
             </div>
           </div>

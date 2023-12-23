@@ -35,7 +35,7 @@ const job = {
     },
     level: {
       type: String,
-      enum: ["Experienced", "Fresher"],
+      enum: ["Experienced", "Fresher", "Mid-Level"],
     },
   },
   requiredSkills: [
@@ -49,6 +49,9 @@ const job = {
   status: {
     type: String,
     enum: ["Open", "Closed"],
+  },
+  datePosted: {
+    type: Date,
   },
 };
 

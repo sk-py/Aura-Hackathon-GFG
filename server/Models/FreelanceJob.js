@@ -5,7 +5,7 @@ const freelanceJob = {
     type: String,
     required: true,
   },
-  description: {
+  payment: {
     type: String,
     required: true,
   },
@@ -13,21 +13,28 @@ const freelanceJob = {
     type: String,
     required: true,
   },
-  payment: {
+  description: {
     type: String,
     required: true,
-  },
-  responsibilities: {
-    type: String,
-    required: false,
   },
   requiredSkills: [
     {
       type: String,
     },
   ],
-  postedBy: {
+  status: {
     type: String,
-    require: true,
+    enum: ["Active", "Closed"],
   },
+  postedBy: [
+    {
+      type: String,
+      require: true,
+    },
+  ],
 };
+
+const FreelanceJobSchema = mongoose.Schema(freelanceJob);
+const FreelanceJobs = mongoose.model("FreelanceJobs", FreelanceJobSchema);
+
+module.exports = FreelanceJobs;

@@ -13,8 +13,9 @@ const freelanceRoutes = require("./Routes/Freelance");
 const cookieParser = require("cookie-parser");
 const skillRoutes = require("./Routes/Skiils");
 const experienceRoutes = require("./Routes/Experience");
-const getUserFromToken = require("./controllers/Validator");
-
+const getUserFromToken = require("./Controllers/Validator");
+const applicationRoutes = require("./Routes/Applications");
+const profileRoutes = require("./Routes/Profile");
 //Calling Database Connection Function
 dbConnect();
 
@@ -23,6 +24,7 @@ const app = express();
 
 //Middlewares
 app.use(bodyParser.json());
+app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -43,9 +45,8 @@ app.post("/tokenVerify", async (req, res) => {
     } else {
       return res.status(400);
     }
-  }
-  else{
-    return res.status(400)
+  } else {
+    return res.status(400);
   }
   //   console.log(user);
   //   if (user) {
@@ -61,7 +62,10 @@ app.use("/api/auth", authRoutes);
 app.use("/api/jobs", jobRoutes);
 app.use("/api/skills", getUserFromToken, skillRoutes);
 app.use("/api/experience", experienceRoutes);
-app.use("/api/projects", getUserFromToken,projectRoutes);
+app.use("/api/projects", getUserFromToken, projectRoutes);
+app.use("/api/application", getUserFromToken, applicationRoutes);
+app.use("/api/freelance", freelanceRoutes);
+app.use("/api/profile", profileRoutes);
 
 //Listening on specified PORT
 const port = 9000;

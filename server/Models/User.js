@@ -37,6 +37,9 @@ const user = {
       type: String, /// Ids of freelance jobs created by this user
     },
   ],
+  summary: {
+    type: String,
+  },
 };
 const UserSchema = mongoose.Schema(user);
 

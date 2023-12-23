@@ -29,59 +29,68 @@ export default function PostSignUpForm() {
   };
   const handleAddSkills = async () => {
     // console.log(formState.skill?.trim().length);
-    if (formState.skill?.trim().length)  {
+    if (formState.skill?.trim().length) {
       const res = await axios.post(
         "http://localhost:9000/api/skills/add",
-        { skills: formState.skill},
+        { skills: formState.skill },
         {
           headers: {
             "auth-token": localStorage.getItem("auth-token"),
           },
         }
       );
-      if (res.status == "201") {
+      if (res.status === "201") {
         setSkillArray([...skillArray, formState.skill]);
       }
     } else {
       toast.error("Skill can't be Empty");
     }
   };
-  const handleProjectAdd = async () =>{
-    const projectobj={projectName:formState.projectName, description:formState.description, link:formState.url }
-    console.log(formState)
-      const res = await axios.post(
-        "http://localhost:9000/api/projects/add",
-        // { skills: formState.skill},
-        projectobj,
-        {
-          headers: {
-            "auth-token": localStorage.getItem("auth-token"),
-          },
-        }
-      );
-      if (res.status == "201") {
-        setProject([...project, projectobj]);
+  const handleProjectAdd = async () => {
+    const projectobj = {
+      projectName: formState.projectName,
+      description: formState.description,
+      link: formState.url,
+    };
+    console.log(formState);
+    const res = await axios.post(
+      "http://localhost:9000/api/projects/add",
+      // { skills: formState.skill},
+      projectobj,
+      {
+        headers: {
+          "auth-token": localStorage.getItem("auth-token"),
+        },
       }
-  }
+    );
+    if (res.status === "201") {
+      toast.success("Project Added Succesfully");
+      setProject([...project, projectobj]);
+    }
+  };
 
-  const handleExperienceAdd = async () =>{
-    const expobj={companyName: formState.companyName, duration: formState.duration, position:formState.role}
-    console.log(formState)
-      const res = await axios.post(
-        "http://localhost:9000/api/experience/add",
-        // { skills: formState.skill},
-        expobj,
-        {
-          headers: {
-            "auth-token": localStorage.getItem("auth-token"),
-          },
-        }
-      );
-      if (res.status == "201") {
-        toast.success("done")
-        setExperience([...experience, expobj]);
+  const handleExperienceAdd = async () => {
+    const expobj = {
+      companyName: formState.companyName,
+      duration: formState.duration,
+      position: formState.role,
+    };
+    console.log(formState);
+    const res = await axios.post(
+      "http://localhost:9000/api/experience/add",
+      // { skills: formState.skill},
+      expobj,
+      {
+        headers: {
+          "auth-token": localStorage.getItem("auth-token"),
+        },
       }
-  }
+    );
+    if (res.status === "201") {
+      toast.success("done");
+      setExperience([...experience, expobj]);
+    }
+  };
   return (
     <>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

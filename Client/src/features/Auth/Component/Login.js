@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { setData, selectLoggedIn,setLocal } from "../AuthSlice";
+import { setData, selectLoggedIn, setLocal } from "../AuthSlice";
 
 export default function Login() {
   const localdata = useSelector((state) => state.auth.localDetail);
@@ -19,7 +19,7 @@ export default function Login() {
     // watch,
     formState: { errors },
   } = useForm();
-  
+
   // useEffect(() => {
   //   // navigate("/")
   // },[]);
@@ -39,7 +39,7 @@ export default function Login() {
         navigate("/");
       }
     } catch (error) {
-      toast.error(error.response.data.err);
+      toast.error("Invalid email or password");
     }
   };
 
@@ -56,8 +56,7 @@ export default function Login() {
     console.log(res.data);
     dispatch(setLocal({ ...res.data }));
   };
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
   return (
     <div>
       <section className="min-h-[70vh] lg:min-h-[80vh] flex items-center justify-center">

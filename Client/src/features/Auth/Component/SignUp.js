@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
@@ -7,7 +7,7 @@ import { setData, selectLoggedIn } from "../AuthSlice";
 import { useSelector } from "react-redux";
 
 export default function SignUp() {
-  const localData = useSelector((state)=>state.auth.localDetail);
+  const localData = useSelector((state) => state.auth.localDetail);
   const {
     register,
     handleSubmit,
@@ -18,7 +18,7 @@ export default function SignUp() {
   const [recruiter, setRecruiter] = useState(false);
   const [isOtpVerified, setIsOtpVerified] = useState(false);
   const [isOtpSend, setIsOtpSend] = useState(false);
-  const [otp,setOtp]=useState(null);
+  const [otp, setOtp] = useState(null);
   const navigate = useNavigate();
   const handleUser = (e) => {
     if (
@@ -36,33 +36,32 @@ export default function SignUp() {
   };
 
   const sendOtp = async () => {
-    let email =getValues("email");
-    console.log(email)
-    console.log("send otp")
+    let email = getValues("email");
+    console.log(email);
+    console.log("send otp");
     const res = await axios.post(
-      "http://localhost:9000/api/auth/user/sent-otp",{email}
+      "http://localhost:9000/api/auth/user/sent-otp",
+      { email }
     );
     if (res.status == 200) {
-      toast.success("OTP sent successfully")
+      toast.success("OTP sent successfully");
       setIsOtpSend(true);
-      setOtp(res.data.otp)
+      setOtp(res.data.otp);
     }
   };
 
-  const verifyotp = async ()=>{
-    const userotp=getValues("otp");
-    console.log(otp)
-    console.log(userotp+" usaer")
-    if(userotp==otp){
-      toast.success("otp verification successfull")
+  const verifyotp = async () => {
+    const userotp = getValues("otp");
+    console.log(otp);
+    console.log(userotp + " usaer");
+    if (userotp == otp) {
+      toast.success("otp verification successfull");
       setIsOtpVerified(true);
       setIsOtpSend(false);
-
+    } else {
+      toast.error("incorrect otp ");
     }
-    else{
-      toast.error("incorrect otp ")
-    }
-  }
+  };
 
   useEffect(() => {
     if (localData) {
@@ -82,6 +81,8 @@ export default function SignUp() {
         );
         if (response.status === 201) {
           toast.success("Account Created and Loggedin successFully");
+          localStorage.setItem("userId", response.data.user._id);
+          localStorage.setItem("auth-token", response.data.authToken);
         }
       } catch (error) {
         toast.error(error.response.data);
@@ -93,20 +94,20 @@ export default function SignUp() {
           "http://localhost:9000/api/auth/user/signup",
           formData
         );
-        if (response.status === 201){
-          console.log(response.data.authtoken+" "+response.data.userId)
+        if (response.status === 201) {
+          console.log(response.data.authtoken + " " + response.data.userId);
           // localStorage.setItem("userId",JSON.stringify(response.data.user.userId))
-          localStorage.setItem("token",JSON.stringify(response.data.token))
+          localStorage.setItem("userId", response.data.user._id);
+          localStorage.setItem("auth-token", response.data.authToken);
+
           toast.success("Account Created and Loggedin successFully");
-        navigate("/postsignup");
-
-
+          navigate("/postsignup");
         }
       } catch (error) {
         toast.error(error.response);
       }
     }
-    
+
     // navigate("/postsignup")
   };
 
@@ -167,22 +168,26 @@ export default function SignUp() {
                   required
                 />
               </div>
-              <input className="rounded-xl border" type="email"
+              <input
+                className="rounded-xl border"
+                type="email"
                 // name="email"
                 {...register("email")}
                 placeholder="Email"
                 autoComplete="email"
                 required
               />
-              {isOtpSend&&<input
-                className="rounded-xl border"
-                type="email"
-                // name="email"
-                {...register("otp")}
-                placeholder="Otp"
-                autoComplete="otp"
-                required
-              />}
+              {isOtpSend && (
+                <input
+                  className="rounded-xl border"
+                  type="email"
+                  // name="email"
+                  {...register("otp")}
+                  placeholder="Otp"
+                  autoComplete="otp"
+                  required
+                />
+              )}
               {recruiter && (
                 <input
                   className="rounded-xl border"
@@ -237,16 +242,20 @@ export default function SignUp() {
                       </p>
                     )}
                   </div>
-
                 </>
               )}
-            {
-              !isOtpSend&&isOtpVerified?<button className="bg-[#0b70ff] text-center rounded-xl text-white py-2 hover:scale-105 duration-300">SignIn</button>: <div className="bg-[#0b70ff] text-center rounded-xl text-white py-2 hover:scale-105 duration-300" 
-              onClick={isOtpSend?verifyotp:sendOtp}>
-                {isOtpSend? "Verify": "Send otp"}
-              </div>
-            }
-             
+              {!isOtpSend && isOtpVerified ? (
+                <button className="bg-[#0b70ff] text-center rounded-xl text-white py-2 hover:scale-105 duration-300">
+                  SignIn
+                </button>
+              ) : (
+                <div
+                  className="bg-[#0b70ff] text-center rounded-xl text-white py-2 hover:scale-105 duration-300"
+                  onClick={isOtpSend ? verifyotp : sendOtp}
+                >
+                  {isOtpSend ? "Verify" : "Send otp"}
+                </div>
+              )}
             </form>
 
             {/* <div className="flex"> */}

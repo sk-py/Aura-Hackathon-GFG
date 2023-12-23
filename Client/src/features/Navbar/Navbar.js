@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Logo from "../../assets/logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -12,7 +12,9 @@ import {
 // #0b70ff
 // #e2eaf8
 export default function Navbar() {
-  const loacalData = useSelector((state=>state.auth.localDetail));
+  const navigate = useNavigate();
+  const location = useLocation();
+  const loacalData = useSelector((state) => state.auth.localDetail);
   const dispatch = useDispatch();
   const [smallMenu, setSmallMenu] = useState(false);
   const loginStatus = useSelector(selectLoggedIn);
@@ -36,36 +38,50 @@ export default function Navbar() {
       document.getElementById("mobile-menu").classList.add("left-[-100rem]");
     }
   };
+
   return (
     <>
       {/* For Desktop */}
       <nav className="w-full flex items-center justify-between px-2 py-3 lg:px-5 lg:py-1">
         <ul className="flex items-center gap-4">
-          <Link to="/" className="flex items-center gap- mr-10">
+          <Link
+            to="/"
+            className={`flex items-center gap- mr-10 ${
+              location.pathname === "/" && "text-[#0b70ff]"
+            }`}
+          >
             <img className="w-10 lg:w-16 rounded-full" src={Logo} alt="" />
             <p className="text-xl font-semibold lg:text-2xl">JobTrek</p>
           </Link>
           <Link
             to="/"
-            className="hidden lg:block hover:text-[#0b70ff] cursor-pointer transition-colors  text-[#1967d2]"
+            className={`hidden lg:block hover:text-[#0b70ff] cursor-pointer transition-colors ${
+              location.pathname === "/" && "text-[#0b70ff]"
+            }`}
           >
             Home
           </Link>
           <Link
             to="/jobs"
-            className="hidden lg:block hover:text-[#0b70ff] cursor-pointer transition-colors "
+            className={`hidden lg:block hover:text-[#0b70ff] cursor-pointer transition-colors ${
+              location.pathname === "/jobs" && "text-[#0b70ff]"
+            }`}
           >
             Find jobs
           </Link>
           <Link
             to="/freelance"
-            className="hidden lg:block hover:text-[#0b70ff] cursor-pointer transition-colors "
+            className={`hidden lg:block hover:text-[#0b70ff] cursor-pointer transition-colors ${
+              location.pathname === "/freelance" && "text-[#0b70ff]"
+            }`}
           >
             Freelance opportunities
           </Link>
           <Link
             to="/myapplication"
-            className="hidden lg:block hover:text-[#0b70ff] cursor-pointer transition-colors "
+            className={`hidden lg:block hover:text-[#0b70ff] cursor-pointer transition-colors ${
+              location.pathname === "/myapplication" && "text-[#0b70ff]"
+            }`}
           >
             Applications
           </Link>
@@ -75,7 +91,7 @@ export default function Navbar() {
             <>
               <div
                 onClick={handleSmallMenu}
-                className="relative flex gap-1 text-[#1967d2] bg-[#e2eaf8] px-2 py-1 rounded-mdhover:text-white cursor-pointer"
+                className="relative flex gap-2 text-[#1967d2] bg-[#e2eaf8] px-3 py-2 rounded-md cursor-pointer"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -95,25 +111,26 @@ export default function Navbar() {
                 {localDetail.firstName}
                 <ul
                   id="smallMenu"
-                  className="hidden absolute  top-10 w-max right-0 p-3 bg-gray-200 rounded-md space-y-2"
+                  className="hidden absolute  top-10 w-max right-0 p-3 bg-gray-100 rounded-md space-y-2"
                 >
                   <Link
                     to="/profile"
-                    className="px-1 block transition-all duration-150 rounded hover:bg-white"
+                    className="p-1 block transition-all duration-150 rounded hover:bg-white"
                   >
                     Profile
                   </Link>
 
                   <Link
                     to="/hirefreelancer"
-                    className="px-1 block transition-all duration-150 rounded hover:bg-white"
+                    className="p-1 block transition-all duration-150 rounded hover:bg-white"
                   >
                     Hire Freelancer
                   </Link>
                   <li
-                    className="px-1 block transition-all duration-150 rounded hover:bg-red-500 hover:text-white text-red-500"
+                    className="p-1 block transition-all duration-150 rounded hover:bg-red-500 hover:text-white text-red-500"
                     onClick={() => {
                       localStorage.removeItem("auth-token");
+                      navigate("/");
                       dispatch(setLocal(null));
                     }}
                   >

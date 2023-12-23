@@ -1,18 +1,67 @@
 const express = require("express");
 const router = express.Router();
 const Applications = require("../Models/Applications");
+const UserModel = require("../Models/User");
 
 //Route for applying on a specefic job post --- for candidate
 router.post("/apply", async (req, res) => {
-  const { userId, jobId } = req.body;
+  const {
+    userId,
+    jobId,
+    companyName,
+    role,
+    appliedDate,
+    projectName,
+    postedBy,
+    indicator,
+  } = req.body;
+  console.log(postedBy, indicator);
+
+  if (projectName) {
+    try {
+      const alreadyApplied = await Applications.findOne({
+        userId: userId,
+        jobId: jobId,
+      });
+
+      if (alreadyApplied) {
+        res.status(409).json("Already applied for this post.");
+      } else {
+        const newApplication = await Applications.create({
+          userId,
+          jobId,
+          projectName: projectName,
+          postedBy: postedBy[1],
+          appliedDate: appliedDate,
+        });
+        res.json("Application created succesfully");
+      }
+    } catch (error) {
+      res.json(`Error: ${error.message}`);
+      console.log("error", error.message);
+    }
+  }
   try {
-    const newApplication = await Applications.create({
-      userId,
-      jobId,
+    const alreadyApplied = await Applications.findOne({
+      userId: userId,
+      jobId: jobId,
     });
-    res.status(200).json("Application created succesfully");
+
+    if (alreadyApplied) {
+      res.status(409).json("Already applied for this post.");
+    } else {
+      const newApplication = await Applications.create({
+        userId,
+        jobId,
+        companyName: companyName,
+        role: role,
+        appliedDate: appliedDate,
+      });
+      res.json("Application created succesfully");
+    }
   } catch (error) {
-    res.status(500).json(`Error: ${error.message}`);
+    // res.json(`Error: ${error.message}`);
+    console.log("error", error.message);
   }
 });
 
@@ -35,7 +84,7 @@ router.put("/status", async (req, res) => {
   }
 });
 
-//Route for displaying all the applications for a specific job --- for Recruiter and Candidate
+//Route for displaying all the applications for a specific job --- for Recruiter
 router.get("/view/:jobId", async (req, res) => {
   const jobId = req.params.jobId;
   try {
@@ -43,6 +92,20 @@ router.get("/view/:jobId", async (req, res) => {
     res.json(allApplications);
   } catch (err) {
     res.status(500).json(`Error: ${err.message}`);
+  }
+});
+
+//Route to display all the created applications of user -- for candidates
+router.get("/getApplications", async (req, res) => {
+  const userId = req.body;
+  try {
+    const allApplications = await Applications.find({ userId: userId.userId });
+    if (!allApplications) {
+      res.status(203).json("Not applied on any openings yet.");
+    }
+    res.status(200).json(allApplications);
+  } catch (error) {
+    res.status(500).json(`Error: ${error.message}`);
   }
 });
 

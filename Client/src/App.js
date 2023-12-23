@@ -13,6 +13,7 @@ import JobPage from "./Pages/JobPage";
 import AboutPage from "./Pages/AboutPage";
 import ProfilePage from "./Pages/ProfilePage";
 import HireFreelancerForm from "./Pages/HireFreelancerForm";
+import FreelanceDetails from "./features/JobDetails/FreelanceDetails";
 
 const router = createBrowserRouter([
   {
@@ -20,8 +21,12 @@ const router = createBrowserRouter([
     element: <Homepage></Homepage>,
   },
   {
-    path: "jobdetails",
+    path: "api/jobs/jobdetails/:Id",
     element: <JobDetailsPage></JobDetailsPage>,
+  },
+  {
+    path: "/api/freelance/details/:Id",
+    element: <FreelanceDetails />,
   },
   {
     path: "login",
