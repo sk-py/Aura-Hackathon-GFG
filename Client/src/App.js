@@ -14,6 +14,7 @@ import AboutPage from "./Pages/AboutPage";
 import ProfilePage from "./Pages/ProfilePage";
 import HireFreelancerForm from "./Pages/HireFreelancerForm";
 import FreelanceDetails from "./features/JobDetails/FreelanceDetails";
+import ProtectedRoute from "./Pages/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -34,7 +35,12 @@ const router = createBrowserRouter([
   },
   {
     path: "myapplication",
-    element: <MyApplicationPage></MyApplicationPage>,
+    element: (
+      <ProtectedRoute>
+        {" "}
+        <MyApplicationPage></MyApplicationPage>
+      </ProtectedRoute>
+    ),
   },
   {
     path: "signup",
@@ -42,7 +48,11 @@ const router = createBrowserRouter([
   },
   {
     path: "postsignup",
-    element: <PostSignUpPage></PostSignUpPage>,
+    element: (
+      <ProtectedRoute>
+        <PostSignUpPage></PostSignUpPage>
+      </ProtectedRoute>
+    ),
   },
   {
     path: "jobs",
@@ -58,11 +68,19 @@ const router = createBrowserRouter([
   },
   {
     path: "/profile",
-    element: <ProfilePage></ProfilePage>,
+    element: (
+      <ProtectedRoute>
+        <ProfilePage></ProfilePage>
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/hirefreelancer",
-    element: <HireFreelancerForm></HireFreelancerForm>,
+    element: (
+      <ProtectedRoute>
+        <HireFreelancerForm></HireFreelancerForm>
+      </ProtectedRoute>
+    ),
   },
 ]);
 

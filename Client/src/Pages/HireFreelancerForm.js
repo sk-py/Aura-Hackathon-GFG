@@ -3,11 +3,26 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../features/Navbar/Navbar";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import axios from "axios";
+import { useDispatch} from "react-redux";
+import { setLocal } from "../features/Auth/AuthSlice";
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function HireFreelancerForm() {
+  const dispatch = useDispatch();
+  const callApi = async () => {
+    const res = await axios.post("http://localhost:9000/tokenVerify", {
+      token: localStorage.getItem("auth-token"),
+    });
+    console.log(res.data);
+    dispatch(setLocal({ ...res.data }));
+  };
+  useEffect(() => {
+    callApi();
+  }, []);
   const navigate = useNavigate();
   const [agreed, setAgreed] = useState(false);
   const [skills, setSkills] = useState([]);

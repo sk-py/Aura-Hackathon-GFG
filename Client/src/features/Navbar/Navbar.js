@@ -14,7 +14,6 @@ import {
 export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
-  const loacalData = useSelector((state) => state.auth.localDetail);
   const dispatch = useDispatch();
   const [smallMenu, setSmallMenu] = useState(false);
   const loginStatus = useSelector(selectLoggedIn);
@@ -155,7 +154,7 @@ export default function Navbar() {
         </ul>
         {/* for Mobile */}
         <div className="flex gap-4 lg:hidden">
-          {loginStatus ? (
+          {localDetail ? (
             <Link
               to="/login"
               className="text-[#1967d2] block bg-[#e2eaf8] px-2 rounded-sm"
@@ -233,7 +232,7 @@ export default function Navbar() {
           <Link to="/myapplication" className="px-4 block text-base py-2">
             Application
           </Link>
-          <li className="px-4 text-base py-2">Profile</li>
+          <Link to="/profile" className="px-4 text-base py-2">Profile</Link>
           {loginType === "recruiter" && (
             <li className="mx-4 my-5 text-center bg-[#0b70ff] py-1 rounded-md text-white hover:bg-blue-800 transition-all duration-300 cursor-pointer">
               Post a Job
