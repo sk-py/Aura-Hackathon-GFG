@@ -1,4 +1,5 @@
 import React from "react";
+import Logo from "../../assets/logo.png";
 
 export default function Footer() {
   return (
@@ -8,13 +9,18 @@ export default function Footer() {
           <div class="md:flex md:justify-between">
             <div class="mb-6 md:mb-0">
               <a href="https://flowbite.com/" class="flex items-center">
-                <img
+                {/* <img
                   src="https://flowbite.com/docs/images/logo.svg"
                   class="h-8 me-3"
                   alt="FlowBite Logo"
-                />
-                <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-                  Flowbite
+                /> */}
+                <span class="self-center text-2xl flex flex-row items-center font-semibold whitespace-nowrap dark:text-white">
+                  <img
+                    className="w-10 lg:w-16 rounded-full"
+                    src={Logo}
+                    alt=""
+                  />
+                  <p className="text-xl font-semibold lg:text-2xl">JobTrek</p>
                 </span>
               </a>
             </div>
@@ -26,7 +32,7 @@ export default function Footer() {
                 <ul class="text-gray-500 dark:text-gray-400 font-medium">
                   <li class="mb-4">
                     <a href="https://flowbite.com/" class="hover:underline">
-                      Flowbite
+                      Jobtrek
                     </a>
                   </li>
                   <li>
@@ -43,7 +49,7 @@ export default function Footer() {
                 <ul class="text-gray-500 dark:text-gray-400 font-medium">
                   <li class="mb-4">
                     <a
-                      href="https://github.com/themesberg/flowbite"
+                      href="https://github.com/sk-py/"
                       class="hover:underline "
                     >
                       Github
@@ -83,7 +89,7 @@ export default function Footer() {
             <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">
               © 2023{" "}
               <a href="https://flowbite.com/" class="hover:underline">
-                Flowbite™
+                Jobtrek™
               </a>
               . All Rights Reserved.
             </span>

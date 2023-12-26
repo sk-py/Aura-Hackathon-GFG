@@ -63,7 +63,7 @@ app.use("/api/jobs", jobRoutes);
 app.use("/api/skills", getUserFromToken, skillRoutes);
 app.use("/api/experience", experienceRoutes);
 app.use("/api/projects", getUserFromToken, projectRoutes);
-app.use("/api/application", getUserFromToken, applicationRoutes);
+app.use("/api/application", applicationRoutes);
 app.use("/api/freelance", freelanceRoutes);
 app.use("/api/profile", profileRoutes);
 

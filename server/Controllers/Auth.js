@@ -18,6 +18,7 @@ const handleUserSignUp = async (req, res) => {
       .status(400)
       .json({ err: "A user with this email already exist" });
   }
+
   const hashedPassword = await bcrypt.hash(password, 10);
   const newUser = await User.create({
     firstName,
@@ -26,14 +27,14 @@ const handleUserSignUp = async (req, res) => {
     password: hashedPassword,
   });
 
-  let token = await jwt.sign({ email }, key);
-  
-  const userId=newUser._id;
+  let token = jwt.sign({ email }, key);
+
+  const userId = newUser._id;
 
   return res.status(201).json({
-    user: { type: "user", firstName, lastName, email ,userId},
+    user: { type: "user", firstName, lastName, email, userId },
     token,
-  }); 
+  });
 };
 
 const handleRecruiterSignUp = async (req, res) => {
@@ -81,7 +82,7 @@ const handleLogin = async (req, res) => {
           lastName: userExists.lastName,
           email: userExists.email,
           companyName: userExists.companyName,
-        }
+        },
         // test:"test"
       });
     } else {
@@ -126,23 +127,26 @@ const sendOtp = expressAsyncHandler(async (req, res) => {
   const { email } = req.body;
 
   const otp = generateOTP();
-  globalotp=otp;
-  
+  globalotp = otp;
+
   var mailOptions = {
     from: "aurahackfest@gmail.com",
     to: email,
     subject: "OTP form Callback Coding",
     text: `Your OTP is: ${otp}`,
   };
-  
+
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
     } else {
-      res.json({"otp":otp})
+      res.json({ otp: otp });
     }
   });
 });
 
-
-
-module.exports = { handleLogin, handleRecruiterSignUp, handleUserSignUp ,sendOtp };
+module.exports = {
+  handleLogin,
+  handleRecruiterSignUp,
+  handleUserSignUp,
+  sendOtp,
+};

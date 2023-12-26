@@ -67,7 +67,7 @@ export default function Modal({ setShowModal, setSummaryUpdated, summary }) {
                     name="summary"
                     id="summary"
                     rows={5}
-                    cols={80}
+                    cols={window.innerWidth < 700 ? 38 : 80}
                     placeholder="Please write a few sentences describing yourself so that others can get to know you better."
                   ></textarea>
                 </div>

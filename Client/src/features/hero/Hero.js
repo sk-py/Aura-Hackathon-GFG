@@ -194,14 +194,14 @@ export default function Hero() {
         </span>
       )}
       {NoData && (
-        <span className="w-screen flex items-center justify-center">
+        <span className="w-[97vw] flex items-center justify-center">
           <span className="text-center w-max text-lg">
             Boost your chances of getting your dream job (AI-Recommended) by
             adding your skills to your profile.
-            <br /> Don't miss out on opportunities that align perfectly with
-            your goals.
+            <br /> Complete your profile to set yourself apart by adding your
+            projects and experiences
             <br />
-            <Link to={"/postsignup"} className="text-[#0b38ff] my-8">
+            <Link to={"/profile"} className="text-[#0b38ff] my-8">
               {" "}
               Take action now!
             </Link>
@@ -325,16 +325,14 @@ export default function Hero() {
         </span>
       )}
       {NoData && (
-        <span className="w-screen flex items-center justify-center">
+        <span className="w-[97vw] flex items-center justify-center">
           <span className="text-center w-max text-lg">
-            Boost your chances of getting your dream job (AI-Recommended) by
-            adding your skills to your profile.
-            <br /> Don't miss out on opportunities that align perfectly with
-            your goals.
+            Please add skills in your profile to get top recommendations from
+            our algorithm
             <br />
-            <Link to={"/postsignup"} className="text-[#0b38ff] my-8">
+            <Link to={"/profile"} className="text-[#0b38ff] my-8">
               {" "}
-              Take action now!
+              Add Skills now!
             </Link>
           </span>
         </span>

@@ -1,3 +1,4 @@
+const AppliedJobs = require("../Models/Applications");
 const experienceModel = require("../Models/Experience");
 const FreelanceJobs = require("../Models/FreelanceJob");
 const UserModel = require("../Models/User");
@@ -89,12 +90,14 @@ const getAllFreelancePosts = async (req, res) => {
 const getSpecificData = async (req, res) => {
   const userId = req.body;
   try {
-    const data = await FreelanceJobs.find({ postedBy: { $in: userId } });
-    if (!data) {
-      res.status(204).json("You don't have any Freelance post posted");
+    const data = await FreelanceJobs.find({ postedBy: userId.userId });
+    console.log("data", data.length);
+    if (data.length === 0) {
+      return res.status(200).json(data);
     }
     res.status(200).json(data);
   } catch (error) {
+    console.log("error :", error.message);
     res.status(500).json({ err: "Internal Server Error, please try again" });
   }
 };
@@ -126,10 +129,31 @@ const getRecommendedData = async (req, res) => {
   } catch (error) {}
 };
 
+//Updating status of application
+const updateStatus = async (req, res) => {
+  try {
+    const { status, applicationId } = req.body;
+    const application = await AppliedJobs.findOneAndUpdate(
+      { _id: applicationId },
+      { status: status },
+      { new: true }
+    );
+    if (!application) {
+      res.status(400).json({ err: "Error updating application status" });
+    }
+    return res.json({ message: "Succesfully updated status of application" });
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ message: "Error updating application status, please try again" });
+  }
+};
+
 module.exports = {
   addFreelanceJob,
   getAllFreelancePosts,
   getSpecificData,
   getDetails,
   getRecommendedData,
+  updateStatus,
 };

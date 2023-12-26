@@ -15,6 +15,7 @@ import ProfilePage from "./Pages/ProfilePage";
 import HireFreelancerForm from "./Pages/HireFreelancerForm";
 import FreelanceDetails from "./features/JobDetails/FreelanceDetails";
 import ProtectedRoute from "./Pages/ProtectedRoute";
+import PostedJobs from "./features/myApplication/PostedJobs";
 
 const router = createBrowserRouter([
   {
@@ -79,6 +80,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <HireFreelancerForm></HireFreelancerForm>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/postedjobs",
+    element: (
+      <ProtectedRoute>
+        <PostedJobs />
       </ProtectedRoute>
     ),
   },

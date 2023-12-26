@@ -57,20 +57,24 @@ const createJobPosts = async (req, res) => {
 
 //Function for sending recommended jobs on the basis of skills of users
 const getRecommendedJobs = async (req, res) => {
-  const id = req.body.userId;
-  console.log("id", id);
-  const user = await UserModel.findOne({ _id: id });
-  if (!user) {
-    res.status(404).json("User not found");
+  try {
+    const id = req.body.userId;
+    console.log("id", id);
+    const user = await UserModel.findOne({ _id: id });
+    if (!user) {
+      res.status(404).json("User not found");
+    }
+    const userSkills = user.skills;
+    if (userSkills.length === 0) {
+      res.json({ err: "Add skills to get job recommendations" });
+    }
+    const matchedJobs = await Jobs.find({
+      requiredSkills: { $in: userSkills },
+    }).limit(8);
+    res.json(matchedJobs);
+  } catch (error) {
+    console.log("Error", error.message);
   }
-  const userSkills = user.skills;
-  if (userSkills.length === 0) {
-    res.json({ err: "Add skills to get job recommendations" });
-  }
-  const matchedJobs = await Jobs.find({
-    requiredSkills: { $in: userSkills },
-  }).limit(8);
-  res.json(matchedJobs);
 };
 
 //Function for deleteing the job Post

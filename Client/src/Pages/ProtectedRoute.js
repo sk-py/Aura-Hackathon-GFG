@@ -6,8 +6,8 @@ export default function ProtectedRoute({ children }) {
   const localDetail = useSelector((state) => state.auth.localDetail);
   return (
     <>
-        {!localDetail&&<Navigate to="/login"></Navigate>}
-        {children}
+      {!localDetail && <Navigate to="/login"></Navigate>}
+      {children}
     </>
-  )
+  );
 }

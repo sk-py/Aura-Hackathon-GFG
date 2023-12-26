@@ -98,10 +98,10 @@ export default function SignUp() {
           console.log(response.data.authtoken + " " + response.data.userId);
           // localStorage.setItem("userId",JSON.stringify(response.data.user.userId))
           localStorage.setItem("userId", response.data.user._id);
-          localStorage.setItem("auth-token", response.data.authToken);
+          localStorage.setItem("auth-token", response.data.token);
 
           toast.success("Account Created and Loggedin successFully");
-          navigate("/postsignup");
+          navigate("/profile");
         }
       } catch (error) {
         toast.error(error.response);
@@ -250,7 +250,7 @@ export default function SignUp() {
                 </button>
               ) : (
                 <div
-                  className="bg-[#0b70ff] text-center rounded-xl text-white py-2 hover:scale-105 duration-300"
+                  className="bg-[#0b70ff] text-center rounded-xl cursor-pointer text-white py-2 hover:scale-105 duration-300"
                   onClick={isOtpSend ? verifyotp : sendOtp}
                 >
                   {isOtpSend ? "Verify" : "Send otp"}

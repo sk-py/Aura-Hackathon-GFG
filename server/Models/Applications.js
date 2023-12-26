@@ -26,6 +26,9 @@ const ApplicationSchema = mongoose.Schema({
   status: {
     type: String,
   },
+  applicantName: {
+    type: String,
+  },
 });
 const AppliedJobs = mongoose.model("JobApplications", ApplicationSchema);
 module.exports = AppliedJobs;

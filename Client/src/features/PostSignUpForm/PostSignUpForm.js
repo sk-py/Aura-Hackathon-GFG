@@ -39,13 +39,16 @@ export default function PostSignUpForm() {
           },
         }
       );
-      if (res.status === "201") {
-        setSkillArray([...skillArray, formState.skill]);
+      if (res.status === 201) {
+        toast.success(`${formState.skill} added to Skills`);
+        setSkillArray((prev) => [...prev, formState.skill]);
+        setFormState({});
       }
     } else {
       toast.error("Skill can't be Empty");
     }
   };
+  console.log("SkillArray", skillArray);
   const handleProjectAdd = async () => {
     const projectobj = {
       projectName: formState.projectName,
@@ -104,6 +107,7 @@ export default function PostSignUpForm() {
               <input
                 onChange={handleFormChange}
                 type="text"
+                value={formState.skill}
                 id="skill"
                 name="skill"
                 placeholder="Add your skills"
@@ -273,12 +277,12 @@ export default function PostSignUpForm() {
           </div>
 
           <div className="mt-6 flex items-center justify-end gap-x-6">
-            <button
+            {/* <button
               type="button"
               className="text-sm font-semibold leading-6 text-gray-900"
             >
               Cancel
-            </button>
+            </button> */}
             <button
               onClick={() => {
                 navigate("/");

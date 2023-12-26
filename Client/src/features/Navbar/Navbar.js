@@ -125,6 +125,12 @@ export default function Navbar() {
                   >
                     Hire Freelancer
                   </Link>
+                  <Link
+                    to="/postedjobs"
+                    className="p-1 block transition-all duration-150 rounded hover:bg-white"
+                  >
+                    Posted Jobs
+                  </Link>
                   <li
                     className="p-1 block transition-all duration-150 rounded hover:bg-red-500 hover:text-white text-red-500"
                     onClick={() => {
@@ -156,7 +162,7 @@ export default function Navbar() {
         <div className="flex gap-4 lg:hidden">
           {localDetail ? (
             <Link
-              to="/login"
+              to="/profile"
               className="text-[#1967d2] block bg-[#e2eaf8] px-2 rounded-sm"
             >
               Profile
@@ -190,11 +196,11 @@ export default function Navbar() {
       {/* Mobile menu */}
       <div
         id="mobile-menu"
-        className="bg-[#0000003e] left-[-100rem] transition-all duration-500 lg:hidden absolute top-0 w-screen h-screen"
+        className="bg-[#0000003e] left-[-100rem] transition-all duration-500 lg:hidden absolute top-0 w-screen h-full overflow-hidden "
       >
         <ul
           id="mobile-menu-item"
-          className=" bg-white w-fit relative overflow-hidden min-h-full py-3 "
+          className=" bg-white w-fit relative overflow-hidden min-h-full py-3 flex flex-col gap-1 "
         >
           <li className="flex items-center gap-14 pr-5 ps-2 pb-5">
             <div className="flex items-center">
@@ -218,26 +224,64 @@ export default function Navbar() {
             </svg>
           </li>
           <Link
-            t0="/"
-            className="px-4 text-base py-2 text-[#0b70ff] bg-teal-50"
+            to="/"
+            className={`px-4 text-base py-2 ${
+              location.pathname === "/" && " text-[#0b70ff] bg-teal-50"
+            }`}
           >
             Home
           </Link>
-          <Link to="/jobs" className="px-4 block text-base py-2">
+          <Link
+            to="/jobs"
+            className={`px-4 text-base py-2 ${
+              location.pathname === "/jobs" && " text-[#0b70ff] bg-teal-50"
+            }`}
+          >
             Jobs
           </Link>
-          <Link to="/freelance" className="px-4 block text-base py-2">
+          <Link
+            to="/freelance"
+            className={`px-4 text-base py-2 ${
+              location.pathname === "/freelance" && " text-[#0b70ff] bg-teal-50"
+            }`}
+          >
             Freelance opportunities
           </Link>
-          <Link to="/myapplication" className="px-4 block text-base py-2">
-            Application
+          <Link
+            to="/myapplication"
+            className={`px-4 text-base py-2 ${
+              location.pathname === "/myapplication" &&
+              " text-[#0b70ff] bg-teal-50"
+            }`}
+          >
+            Applications
           </Link>
-          <Link to="/profile" className="px-4 text-base py-2">Profile</Link>
+          <Link
+            to="/profile"
+            className={`px-4 text-base py-2 ${
+              location.pathname === "/profile" && " text-[#0b70ff] bg-teal-50"
+            }`}
+          >
+            Profile
+          </Link>
+          <Link to="/PostedJobs" className="px-4 text-base py-2">
+            Posted Jobs
+          </Link>
           {loginType === "recruiter" && (
             <li className="mx-4 my-5 text-center bg-[#0b70ff] py-1 rounded-md text-white hover:bg-blue-800 transition-all duration-300 cursor-pointer">
               Post a Job
             </li>
           )}
+          <li
+            className="p-1 px-4 text-base py-2 block transition-all duration-150 rounded hover:bg-red-500 hover:text-white text-red-500"
+            onClick={() => {
+              localStorage.removeItem("auth-token");
+              navigate("/");
+              dispatch(setLocal(null));
+            }}
+          >
+            Log Out
+          </li>
         </ul>
       </div>
     </>

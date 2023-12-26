@@ -292,14 +292,14 @@ export default function Profile() {
               id="skill"
               name="skill"
               value={skills}
-              placeholder="Add your skills"
+              placeholder="Add skills one by one"
               className="rounded-md border-gray-300 p-1 sm:text-sm"
             />
             <button
               onClick={handleAddSkills}
               className="mx-4 text-sm bg-green-500 text-white px-3 rounded-md py-1"
             >
-              Add
+              Add Skills
             </button>
             <div>
               {skillArray.map((skill, i) => {
@@ -364,7 +364,7 @@ export default function Profile() {
                         setProjectForm(!projectForm);
                       }}
                     >
-                      Add
+                      Add Projects
                     </button>
                   )}
                   {/* {projectForm ? "Save" : "Add"} */}
@@ -458,10 +458,18 @@ export default function Profile() {
                   );
                 })}
 
-                {
-                  /* Exprerience Details */
-                  console.log("allow :" + Allow, "projectSatte :" + projectForm)
-                }
+                {!project.length > 0 && (
+                  <div className="w-[63vw] text-center">
+                    <span className="w-full flex items-center justify-center text-center">
+                      Showcase your talent by adding projects to your profile
+                      <br></br>
+                      Recruiters look for real-world examples of your work!
+                    </span>
+                  </div>
+                )}
+
+                {/* Exprerience Details */}
+
                 <div className="col-span-full flex justify-between mt-5">
                   <label
                     htmlFor="username"
@@ -501,7 +509,7 @@ export default function Profile() {
                         setExperienceForm(!experienceForm);
                       }}
                     >
-                      Add
+                      Add Experience
                     </button>
                   )}
                 </div>

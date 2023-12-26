@@ -2,9 +2,10 @@ const express = require("express");
 const router = express.Router();
 const Applications = require("../Models/Applications");
 const UserModel = require("../Models/User");
+const getUserFromToken = require("../Controllers/Validator");
 
 //Route for applying on a specefic job post --- for candidate
-router.post("/apply", async (req, res) => {
+router.post("/apply", getUserFromToken, async (req, res) => {
   const {
     userId,
     jobId,
@@ -14,6 +15,7 @@ router.post("/apply", async (req, res) => {
     projectName,
     postedBy,
     indicator,
+    userName,
   } = req.body;
   console.log(postedBy, indicator);
 
@@ -33,6 +35,7 @@ router.post("/apply", async (req, res) => {
           projectName: projectName,
           postedBy: postedBy[1],
           appliedDate: appliedDate,
+          applicantName: userName,
         });
         res.json("Application created succesfully");
       }
@@ -66,7 +69,7 @@ router.post("/apply", async (req, res) => {
 });
 
 //Route for updating status of candidate's application --- for recruiter
-router.put("/status", async (req, res) => {
+router.put("/status", getUserFromToken, async (req, res) => {
   const { status, jobId, userId } = req.body;
   try {
     const job = await Applications.findOneAndUpdate(
@@ -84,7 +87,7 @@ router.put("/status", async (req, res) => {
   }
 });
 
-//Route for displaying all the applications for a specific job --- for Recruiter
+//Route for displaying all the applications for a specific job --- for Recruiter and Candidate
 router.get("/view/:jobId", async (req, res) => {
   const jobId = req.params.jobId;
   try {
@@ -96,7 +99,7 @@ router.get("/view/:jobId", async (req, res) => {
 });
 
 //Route to display all the created applications of user -- for candidates
-router.get("/getApplications", async (req, res) => {
+router.get("/getApplications", getUserFromToken, async (req, res) => {
   const userId = req.body;
   try {
     const allApplications = await Applications.find({ userId: userId.userId });

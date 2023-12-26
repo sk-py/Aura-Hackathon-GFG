@@ -4,7 +4,7 @@ import Navbar from "../features/Navbar/Navbar";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import { setLocal } from "../features/Auth/AuthSlice";
 
 function classNames(...classes) {
@@ -89,7 +89,7 @@ export default function HireFreelancerForm() {
     <>
       <Navbar></Navbar>
 
-      <div className="isolate bg-white px-6 py-3 lg:px-8">
+      <div className=" bg-white px-6 py-3 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             Freelance Project Form
@@ -191,7 +191,7 @@ export default function HireFreelancerForm() {
             type="text"
             id="skill"
             value={SkillsInput}
-            placeholder="Add your skills"
+            placeholder="Add required skills"
             onChange={handleChange}
             className="rounded-md border-gray-300 p-1 sm:text-sm"
           />
